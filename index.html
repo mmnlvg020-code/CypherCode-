@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="green">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CypherCode — Guía de Programación I</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Vinculación del CSS de diseño Cyberpunk -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Configuración PWA y Web App Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00ff41">
+</head>
+<body>
+
+    <!-- Efecto CRT Scanlines Retro -->
+    <div class="crt-overlay"></div>
+
+    <!-- Barra de Carga / Simulación Estética -->
+    <div id="loadbar" style="position:fixed; top:0; left:0; width:0; height:3px; background:var(--primary); transition: width 0.4s ease; z-index:9999;"></div>
+
+    <!-- Fondo de Lluvia Matrix -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- Navegación de Escritorio -->
+    <nav id="desktop-nav" class="glass">
+        <div class="nav-brand mono">
+            root@cyphercode:~$ <span class="blink">_</span>
+        </div>
+        <div class="nav-links">
+            <button class="nav-btn glass-btn active" onclick="showSection('inicio', this)">Inicio</button>
+            <button class="nav-btn glass-btn" onclick="showSection('conceptos', this)">Conceptos</button>
+            <button class="nav-btn glass-btn" onclick="showSection('flashcards', this)">Flashcards</button>
+            <button class="nav-btn glass-btn" onclick="showSection('quiz', this)">Quiz</button>
+            <button class="nav-btn glass-btn" onclick="showSection('biblioteca', this)">Biblioteca</button>
+            <button class="nav-btn glass-btn" onclick="showSection('proyectos', this)">Proyectos</button>
+            <button class="nav-btn glass-btn" onclick="showSection('terminal', this)">Consola</button>
+            <button class="nav-btn glass-btn" onclick="showSection('visualizador', this)">Visualizador</button>
+            <button class="nav-btn glass-btn" onclick="showSection('referencia', this)">Ref</button>
+        </div>
+        <div class="controls">
+            <!-- HUD de XP Gamificado -->
+            <div class="xp-hud" title="Nivel y experiencia del programador">
+                <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6z"/></svg>
+                <span id="hud-level">LVL 1</span> | <span id="hud-xp">XP 0/100</span>
+            </div>
+            <!-- Botón del Panel de Personalización -->
+            <button class="glass-btn" id="btn-open-custom" onclick="toggleCustomPanel()" title="Personalización del Sistema">⚙</button>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal SPA -->
+    <main>
+        <!-- SECCIÓN 1: INICIO -->
+        <section id="s-inicio" class="section active">
+            <div class="hero">
+                <h1 class="mono">&gt; CypherCode</h1>
+                <p>Estructuras de datos, algoritmia y fundamentos interactivos de Programación I.</p>
+                
+                <div class="stats-grid" id="stats-grid">
+                    <!-- Completado dinámicamente por app.js -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: CONCEPTOS -->
+        <section id="s-conceptos" class="section">
+            <div class="concepts-layout">
+                <aside class="glass sidebar">
+                    <div style="font-weight: bold; font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--primary); padding-bottom:8px; border-bottom:1px solid var(--border-glass);">
+                        // UNIDADES TEMÁTICAS
+                    </div>
+                    <ul id="topic-list" style="margin-top:10px;">
+                        <!-- Cargado dinámicamente por app.js -->
+                    </ul>
+                </aside>
+                <div class="glass content-panel" id="topic-detail">
+                    <!-- Cargado dinámicamente al hacer clic en un tema -->
+                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; opacity:0.6; text-align:center;">
+                        <h2 class="mono" style="color:var(--primary);">&gt; SELECCIONA UN TEMA</h2>
+                        <p>Usa el menú lateral para abrir los conceptos oficiales y comparar la sintaxis en múltiples lenguajes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: FLASHCARDS -->
+        <section id="s-flashcards" class="section">
+            <h2 class="mono" style="text-align:center; color: var(--primary); margin-bottom: 0.5rem;">Memory Swap</h2>
+            <p style="text-align:center; margin-bottom: 2rem;">Repaso mnemotécnico. Haz clic en la tarjeta para voltearla.</p>
+
+            <div class="category-filter-bar">
+                <select class="theme-select" id="fc-cat" onchange="renderFlashcards()" style="max-width:300px;">
+                    <option value="all">TODAS LAS CATEGORÍAS</option>
+                </select>
+                <button class="glass-btn" onclick="shuffleFC()">⚡ MEZCLAR</button>
+                <span class="mono" id="fc-count" style="display:inline-flex; align-items:center; color:var(--primary);">[0 tarjetas]</span>
+            </div>
+
+            <div id="fc-grid">
+                <!-- Cargado dinámicamente por app.js -->
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: QUIZ -->
+        <section id="s-quiz" class="section">
+            <!-- Pantalla Inicial del Quiz -->
+            <div class="glass quiz-panel" id="quiz-start-screen">
+                <h2 class="mono" style="color:var(--primary); margin-bottom:1.5rem; text-align:center;">&gt; Unit Test Evaluativo</h2>
+                <p style="margin-bottom:2rem; text-align:center;">Pon a prueba tu lógica y conocimientos del lenguaje compilado. Elige una categoría y comienza el test.</p>
+                <div style="display:flex; flex-direction:column; gap:1.5rem; max-width:400px; margin:0 auto;">
+                    <select class="theme-select" id="quiz-cat" style="width:100%;">
+                        <option value="all">TODAS LAS CATEGORÍAS</option>
+                    </select>
+                    <button class="glass-btn" onclick="startQuiz()" style="font-size:1.1rem; padding:12px;">💻 INICIAR PROTOCOLO</button>
+                </div>
+            </div>
+
+            <!-- Pantalla Activa de Juego -->
+            <div class="glass quiz-panel" id="quiz-play" style="display:none;">
+                <!-- Completado dinámicamente por app.js -->
+            </div>
+
+            <!-- Resumen Final del Quiz -->
+            <div class="glass quiz-panel" id="quiz-summary-screen" style="display:none;">
+                <!-- Completado dinámicamente por app.js -->
+            </div>
+        </section>
+
+        <!-- SECCIÓN 5: BIBLIOTECA -->
+        <section id="s-biblioteca" class="section">
+            <h2 class="mono" style="color: var(--primary); margin-bottom: 0.5rem; text-align:center;">&gt; Code Forge Library</h2>
+            <p style="text-align:center; margin-bottom: 2rem;">Catálogo interactivo de comandos, métodos y estructuras algorítmicas básicas.</p>
+
+            <div class="search-bar-container">
+                <input type="text" class="cyber-search" id="lib-search" oninput="renderLibrary()" placeholder="root@cyphercode:~$ search_cmd --query ...">
+            </div>
+
+            <div class="library-body">
+                <!-- Se poblará con la vista de cuadrícula de categorías o lista filtrada -->
+                <div class="verb-cat-grid" id="lib-grid">
+                    <!-- Completado dinámicamente por app.js -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 6: CONSOLA Y JUEGO DE DEPURACIÓN -->
+        <section id="s-terminal" class="section">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem;">
+                <!-- Debug Protocol Widget -->
+                <div class="glass debug-panel">
+                    <h2 class="mono" style="color:var(--danger); text-shadow:0 0 10px var(--danger-glow); margin-bottom:1rem;">&gt; Debug Protocol</h2>
+                    <p style="margin-bottom:1.5rem; font-size:0.9rem;">El Mainframe tiene errores lógicos en este sector. Haz clic sobre la línea que genera el error de compilación o ejecución y selecciona la solución adecuada.</p>
+                    
+                    <div class="debug-code-container" id="debug-container">
+                        <!-- Líneas cargadas por app.js -->
+                    </div>
+
+                    <div class="glass debug-console" id="debug-console" style="border-color:var(--danger);">
+                        <div class="debug-console-title mono">⚠️ ALERTA DE COMPILADOR:</div>
+                        <p id="debug-err-desc" style="font-size:0.85rem; margin-bottom:1rem; opacity:0.8;"></p>
+                        <div class="debug-console-options" id="debug-options">
+                            <!-- Opciones para solucionar el bug -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Forge Sandbox Terminal Widget -->
+                <div class="sandbox-terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-circles">
+                            <span class="term-circle red"></span>
+                            <span class="term-circle yellow"></span>
+                            <span class="term-circle green"></span>
+                        </div>
+                        <div class="terminal-title">root@cyphercode:~$ sandbox</div>
+                    </div>
+                    <div class="terminal-body" id="term-body">
+                        <div class="terminal-output" id="term-output">CypherCode Core v1.0.0 (Matrix Shell)
+Escribe 'help' para ver una lista de comandos disponibles.</div>
+                        <div class="terminal-line">
+                            <span class="mono" style="color:var(--primary); font-weight:bold; white-space:nowrap;">root@cyphercode:~$</span>
+                            <input type="text" class="terminal-input-field" id="term-input" onkeydown="handleTerminalCommand(event)" autocomplete="off" spellcheck="false">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 7: VISUALIZADOR (BIG-O ANALYZER & TRACE MODE) -->
+        <section id="s-visualizador" class="section">
+            <div class="analyzer-layout">
+                <!-- Big-O Slider Analyzer -->
+                <div class="glass analyzer-control-panel">
+                    <h2 class="mono" style="color:var(--primary); margin-bottom:1rem;">&gt; Big-O Analyzer</h2>
+                    <p style="font-size:0.9rem; margin-bottom:1.5rem;">Ajusta el tamaño del arreglo de datos ($N$) y observa cómo impacta de forma teórica en el consumo de CPU y memoria según el algoritmo seleccionado.</p>
+                    
+                    <div style="margin-bottom:1.5rem;">
+                        <label class="mono" style="font-size:0.85rem; color:var(--primary);">Seleccionar Algoritmo:</label>
+                        <select class="theme-select" id="analyzer-algo" onchange="updateAnalyzer()" style="width:100%; margin-top:0.5rem;">
+                            <option value="o1">Búsqueda por Índice / Hashing — O(1)</option>
+                            <option value="ologn">Búsqueda Binaria — O(log N)</option>
+                            <option value="on">Búsqueda Lineal / Suma simple — O(N)</option>
+                            <option value="onlogn">Ordenamiento Merge / QuickSort — O(N log N)</option>
+                            <option value="on2">Bubble Sort / Bucles anidados — O(N²)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <div style="display:flex; justify-content:space-between;" class="mono">
+                            <span>Tamaño de Datos (N):</span>
+                            <span id="analyzer-n-val" style="color:var(--primary); font-weight:bold;">100</span>
+                        </div>
+                        <input type="range" min="1" max="1000" value="100" class="cyber-slider" id="analyzer-slider" oninput="updateAnalyzer()">
+                    </div>
+
+                    <div style="margin-top:1.5rem; font-size:0.85rem; line-height:1.5; opacity:0.8;" id="analyzer-desc">
+                        <!-- Descripción técnica cargada dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- Big-O Gauges -->
+                <div class="glass graph-gauge-container">
+                    <div class="gauge-block">
+                        <div class="gauge-label mono">
+                            <span>Ciclos de CPU:</span>
+                            <span id="gauge-cpu-val">Óptimo</span>
+                        </div>
+                        <div class="gauge-bar-outer">
+                            <div class="gauge-bar-inner" id="gauge-cpu"></div>
+                        </div>
+                    </div>
+                    <div class="gauge-block">
+                        <div class="gauge-label mono">
+                            <span>Uso de Memoria:</span>
+                            <span id="gauge-mem-val">Óptimo</span>
+                        </div>
+                        <div class="gauge-bar-outer">
+                            <div class="gauge-bar-inner" id="gauge-mem"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trace Mode visualizer widget -->
+            <div class="glass trace-panel" style="margin-top:2rem;">
+                <h2 class="mono" style="color:var(--primary); margin-bottom:1rem;">&gt; Trace Mode: Búsqueda Binaria</h2>
+                <p style="font-size:0.9rem; margin-bottom:1.5rem;">Visualiza paso a paso cómo se desplazan los punteros Izquierda (L), Derecha (R) y Medio (M) sobre una colección ordenada para localizar el valor buscado.</p>
+                
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+                    <div class="mono" style="font-size:0.9rem;">
+                        <span>Buscar número: </span>
+                        <span style="color:var(--primary); font-weight:bold;">37</span>
+                    </div>
+                    <div class="trace-controls">
+                        <button class="glass-btn" onclick="prevTraceStep()">[ &lt; Paso Anterior ]</button>
+                        <button class="glass-btn" onclick="nextTraceStep()">[ Paso Siguiente &gt; ]</button>
+                        <button class="glass-btn" onclick="resetTrace()">[ ⟳ Reiniciar ]</button>
+                    </div>
+                </div>
+
+                <div class="trace-visualizer" id="trace-visualizer">
+                    <!-- Celdas numéricas inyectadas dinámicamente -->
+                </div>
+
+                <div class="trace-explain-box mono" id="trace-explain">
+                    Inicia el rastreo presionando 'Paso Siguiente'.
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 8: REFERENCIA RÁPIDA -->
+        <section id="s-referencia" class="section">
+            <div class="glass content-panel">
+                <h2 class="mono" style="color:var(--primary);">&gt; Referencia Sintáctica Rápida</h2>
+                <div class="category-filter-bar" style="justify-content: flex-start; margin-bottom:1.5rem;">
+                    <button class="glass-btn ref-tab active" onclick="showRef('tipos', this)">Tipos de Datos</button>
+                    <button class="glass-btn ref-tab" onclick="showRef('operadores', this)">Operadores</button>
+                    <button class="glass-btn ref-tab" onclick="showRef('control', this)">Estructuras de Control</button>
+                    <button class="glass-btn ref-tab" onclick="showRef('arrays', this)">Arrays y Colecciones</button>
+                </div>
+                <div id="ref-content">
+                    <!-- Cargado dinámicamente por app.js -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Navegación Móvil Inferior -->
+    <nav id="mobile-nav" class="glass">
+        <button class="mob-btn active" onclick="showSection('inicio', this)">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            Inicio
+        </button>
+        <button class="mob-btn" onclick="showSection('conceptos', this)">
+            <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+            Conceptos
+        </button>
+        <button class="mob-btn" onclick="showSection('flashcards', this)">
+            <svg viewBox="0 0 24 24"><path d="M4 6h2v14H4zm3-4h13c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2zm0 2v12h13V4H7z"/></svg>
+            Cards
+        </button>
+        <button class="mob-btn" onclick="showSection('quiz', this)">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            Quiz
+        </button>
+        <button class="mob-btn" onclick="showSection('terminal', this)">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-9 12H5v-2h6v2zm4-4H5V10h10v2zm4-4H5V6h14v2z"/></svg>
+            Consola
+        </button>
+    </nav>
+
+    <!-- Panel de Personalización Lateral -->
+    <div id="customize-panel" class="glass">
+        <div class="customize-header">
+            <h3 class="mono">&gt; Configuración</h3>
+            <button class="close-custom mono" onclick="toggleCustomPanel()">[X]</button>
+        </div>
+
+        <div class="customize-section">
+            <label class="mono">// TEMAS DE COLOR</label>
+            <div class="theme-grid">
+                <button class="glass-btn theme-btn active-theme" data-theme="green">Verde</button>
+                <button class="glass-btn theme-btn" data-theme="amber">Ámbar</button>
+                <button class="glass-btn theme-btn" data-theme="cyan">Cian</button>
+                <button class="glass-btn theme-btn" data-theme="white">Blanco</button>
+                <button class="glass-btn theme-btn" data-theme="red">Rojo</button>
+                <button class="glass-btn theme-btn" data-theme="purple">Synthwave</button>
+            </div>
+        </div>
+
+        <div class="customize-section">
+            <div class="customize-row">
+                <label class="mono">// VELOCIDAD LLUVIA</label>
+                <span class="mono" id="speed-val">40ms</span>
+            </div>
+            <input type="range" min="10" max="150" value="40" class="cyber-slider" oninput="setRainSpeed(this.value)">
+        </div>
+
+        <div class="customize-section">
+            <div class="customize-row">
+                <label class="mono">// DENSIDAD (FUENTE)</label>
+                <span class="mono" id="density-val">14px</span>
+            </div>
+            <input type="range" min="10" max="28" value="14" class="cyber-slider" oninput="setRainDensity(this.value)">
+        </div>
+
+        <div class="customize-section" style="margin-top:1rem; display:flex; flex-direction:column; gap:0.5rem;">
+            <button class="glass-btn" id="btn-pause-rain" onclick="toggleRain()">⏸ Pausar Lluvia</button>
+            <button class="glass-btn" id="btn-hide-rain" onclick="toggleRainVisible()">👁 Ocultar Lluvia</button>
+        </div>
+    </div>
+
+    <!-- Achievement Toast Flotante -->
+    <div class="achievement-toast" id="toast-achievement">
+        <span style="font-size:1.5rem;">🏆</span>
+        <div>
+            <div style="font-size:0.7rem; opacity:0.6; letter-spacing:1px;">NUEVA COMPILACIÓN EXITOSA:</div>
+            <div id="toast-achievement-title" style="font-size:0.95rem; color:var(--primary);">¡Logro Desbloqueado!</div>
+        </div>
+    </div>
+
+    <!-- Lógica JavaScript Principal -->
+    <script src="app.js"></script>
+
+    <!-- Inicialización del Service Worker para PWA Offline -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('[PWA] Service Worker registrado con éxito', reg.scope))
+                    .catch(err => console.error('[PWA] Fallo en registro del Service Worker', err));
+            });
+        }
+    </script>
+</body>
+</html>

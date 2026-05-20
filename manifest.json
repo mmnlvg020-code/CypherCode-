@@ -1,0 +1,11 @@
+{
+  "name": "Guía de Programación I - CypherCode",
+  "short_name": "CypherCode",
+  "description": "Guía de repaso interactiva de Programación I",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00ff41",
+  "orientation": "portrait-primary",
+  "icons": []
+}
