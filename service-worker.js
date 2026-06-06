@@ -1,4 +1,4 @@
-const CACHE_NAME = 'cyphercode-progra-v5';
+const CACHE_NAME = 'cyphercode-progra-v6';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

@@ -13,6 +13,8 @@
     <!-- Configuración PWA y Web App Manifest -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00ff41">
+    <!-- Highlight.js for Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 </head>
 <body>
 
@@ -28,25 +30,16 @@
     <!-- Navegación de Escritorio -->
     <nav id="desktop-nav" class="glass">
         <div class="nav-brand mono">
-            root@cyphercode:~$ <span class="blink">_</span>
+            CypherCode
         </div>
         <div class="nav-links">
             <button class="nav-btn glass-btn active" onclick="showSection('inicio', this)">Inicio</button>
             <button class="nav-btn glass-btn" onclick="showSection('conceptos', this)">Conceptos</button>
-            <button class="nav-btn glass-btn" onclick="showSection('flashcards', this)">Flashcards</button>
-            <button class="nav-btn glass-btn" onclick="showSection('quiz', this)">Quiz</button>
             <button class="nav-btn glass-btn" onclick="showSection('biblioteca', this)">Biblioteca</button>
-            <button class="nav-btn glass-btn" onclick="showSection('proyectos', this)">Proyectos</button>
-            <button class="nav-btn glass-btn" onclick="showSection('terminal', this)">Consola</button>
-            <button class="nav-btn glass-btn" onclick="showSection('visualizador', this)">Visualizador</button>
-            <button class="nav-btn glass-btn" onclick="showSection('referencia', this)">Ref</button>
+            <button class="nav-btn glass-btn" onclick="showSection('referencia', this)">Referencia</button>
         </div>
         <div class="controls">
-            <!-- HUD de XP Gamificado -->
-            <div class="xp-hud" title="Nivel y experiencia del programador">
-                <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 4l7.5 13h-15L12 6z"/></svg>
-                <span id="hud-level">LVL 1</span> | <span id="hud-xp">XP 0/100</span>
-            </div>
+            <!-- Controles -->
             <!-- Botón del Panel de Personalización -->
             <button class="glass-btn" id="btn-open-custom" onclick="toggleCustomPanel()" title="Personalización del Sistema">⚙</button>
         </div>
@@ -56,16 +49,140 @@
     <main>
         <!-- SECCIÓN 1: INICIO -->
         <section id="s-inicio" class="section active">
-            <div class="hero">
-                <h1 class="mono">&gt; CypherCode</h1>
-                <p>Estructuras de datos, algoritmia y fundamentos interactivos de Programación I.</p>
+            <div class="hero" style="text-align: left; padding: 1rem 0 2rem 0;">
+                <h1 class="mono" style="font-size: 2.2rem;">&gt;_ <span class="matrix-glitch" id="main-hero-title">CypherCode<span style="color: var(--primary);">.exe</span><span class="blink" style="color: var(--primary);">_</span></span></h1>
+                <p style="color: var(--text-main); opacity: 0.7;">Centro de Aprendizaje de Estructuras y Algoritmos</p>
+            </div>
+
+            <!-- Dashboard Stats Panels -->
+            <div class="dashboard-stats">
+                <!-- PROGRESS -->
+                <div class="stat-panel glass">
+                    <div class="panel-header">PROGRESS</div>
+                    <div class="progress-circle" style="--percent: 68">
+                        <div class="progress-text">
+                            <h2 style="font-size: 2.5rem; margin-bottom: 0.2rem;">68%</h2>
+                            <span class="subtext" style="color: var(--text-main); font-weight: bold;">Python Path</span>
+                            <span class="subtext2" style="font-size: 0.75rem; opacity: 0.6;">8/12 Modules</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PERFORMANCE -->
+                <div class="stat-panel glass">
+                    <div class="panel-header">PERFORMANCE</div>
+                    <span class="subtext" style="display:block; margin-bottom: 1rem; opacity: 0.8; font-size: 0.85rem;">Quiz Scores</span>
+                    <div class="bar-chart">
+                        <div class="y-axis">
+                            <span>100</span>
+                            <span>75</span>
+                            <span>50</span>
+                            <span>25</span>
+                            <span>0</span>
+                        </div>
+                        <div class="bars">
+                            <div class="bar-col"><div class="bar"><div class="fill" style="height: 50%;"></div><span class="bar-val">50</span></div><span>1</span></div>
+                            <div class="bar-col"><div class="bar"><div class="fill" style="height: 60%;"></div><span class="bar-val">60</span></div><span>2</span></div>
+                            <div class="bar-col"><div class="bar"><div class="fill" style="height: 60%;"></div><span class="bar-val">60</span></div><span>3</span></div>
+                            <div class="bar-col"><div class="bar"><div class="fill" style="height: 85%;"></div><span class="bar-val">85</span></div><span>4</span></div>
+                            <div class="bar-col"><div class="bar"><div class="fill" style="height: 100%;"></div><span class="bar-val">100</span></div><span>5</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SKILL LEVELS -->
+                <div class="stat-panel glass">
+                    <div class="panel-header">SKILL LEVELS</div>
+                    <div class="hex-grid">
+                        <div class="hex-row">
+                            <div class="hex filled"><div class="hex-inner">Python<br><small>(Advanced)</small></div></div>
+                        </div>
+                        <div class="hex-row right">
+                            <div class="hex filled alt"><div class="hex-inner">Logic<br><small>(Expert)</small></div></div>
+                        </div>
+                        <div class="hex-row">
+                            <div class="hex empty"><div class="hex-inner">Algorithms<br><small>(Mid)</small></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Access Grid (Práctica) -->
+            <h3 class="mono" style="margin-top: 3rem; margin-bottom: 1rem; opacity: 0.8; color: var(--primary);">// ZONA DE PRÁCTICA</h3>
+            <div class="quick-access-grid">
+                <div class="qa-card glass hover-green" onclick="showSection('flashcards')">
+                    <div class="qa-category">MEMORIA</div>
+                    <div class="qa-title">Tarjetas de<br>Estudio</div>
+                    <div class="qa-action">🗂️ Iniciar repaso</div>
+                </div>
+
+                <div class="qa-card glass hover-blue" onclick="showSection('quiz')">
+                    <div class="qa-category">EVALUACIÓN</div>
+                    <div class="qa-title">Quiz de<br>Conocimientos</div>
+                    <div class="qa-action">✅ Comenzar test</div>
+                </div>
+
+                <div class="qa-card glass hover-pink" onclick="showSection('terminal')">
+                    <div class="qa-category">DEPURACIÓN</div>
+                    <div class="qa-title">Consola y<br>Debug</div>
+                    <div class="qa-action">🐞 Buscar errores</div>
+                </div>
+
+                <div class="qa-card glass hover-yellow" onclick="showSection('visualizador')">
+                    <div class="qa-category">ALGORITMOS</div>
+                    <div class="qa-title">Visualizador<br>Trace Mode</div>
+                    <div class="qa-action">👁️ Ver algoritmos</div>
+                </div>
+
+                <div class="qa-card glass hover-purple" onclick="showSection('ejemplos')">
+                    <div class="qa-category">CÓDIGO FUENTE</div>
+                    <div class="qa-title">Galería de<br>Ejemplos</div>
+                    <div class="qa-action">📂 Ver ejemplos</div>
+                </div>
+            </div>
+
+            
+        <!-- MANIFIESTO / FILOSOFÍA -->
+            <div class="glass" style="margin-top: 4rem; margin-bottom: 2rem; text-align: left; border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; gap: 0.5rem; max-width: 900px; margin-inline: auto;">
+                <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.5rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20"></path>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    <h3 class="mono" style="margin: 0; color: var(--primary);">Filosofía de la Plataforma</h3>
+                </div>
+                <p style="margin: 0; color: var(--text-main); opacity: 0.8; font-size: 0.95rem; line-height: 1.6;">
+                    <strong>Aprender haciendo, no memorizando.</strong> La misión de CypherCode es proporcionar un entorno inmersivo y sin distracciones para dominar la lógica de programación. No se trata solo de leer teoría pasivamente, sino de interactuar con el código, buscar bugs como un verdadero depurador y visualizar algoritmos abstractos paso a paso. Centraliza tus recursos, entrena tus habilidades y eleva tu nivel técnico.
+                </p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 7: EJEMPLOS -->
+        <section id="s-ejemplos" class="section">
+            <h2 class="mono" style="text-align:center; color: var(--primary); margin-bottom: 0.5rem;">Galería de Ejemplos</h2>
+            <p style="text-align:center; margin-bottom: 2rem;">Fragmentos de código extraídos directamente de las tareas de Progra 1 y 2.</p>
+
+            <div class="concepts-layout">
+                <aside class="glass sidebar">
+                    <div style="font-weight: bold; font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--primary); padding-bottom:8px; border-bottom:1px solid var(--border-glass); margin-bottom: 10px;">
+                        // FILTROS
+                    </div>
+                    <div id="examples-filters" style="display:flex; flex-direction:column; gap:0.5rem; max-height: calc(100vh - 200px); overflow-y: auto;">
+                        <!-- Se poblarán los tags dinámicamente -->
+                    </div>
+                </aside>
                 
-                <div class="stats-grid" id="stats-grid">
-                    <!-- Completado dinámicamente por app.js -->
+                <div class="glass content-panel" id="example-viewer" style="width: 100%;">
+                    <!-- Cargado dinámicamente -->
+                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; opacity:0.6; text-align:center;">
+                        <h2 class="mono" style="color:var(--primary);">&gt; SELECCIONA UN FILTRO</h2>
+                        <p>Usa el menú lateral para filtrar los ejemplos disponibles.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
+        
         <!-- SECCIÓN 2: CONCEPTOS -->
         <section id="s-conceptos" class="section">
             <div class="concepts-layout">
@@ -89,8 +206,8 @@
 
         <!-- SECCIÓN 3: FLASHCARDS -->
         <section id="s-flashcards" class="section">
-            <h2 class="mono" style="text-align:center; color: var(--primary); margin-bottom: 0.5rem;">Memory Swap</h2>
-            <p style="text-align:center; margin-bottom: 2rem;">Repaso mnemotécnico. Haz clic en la tarjeta para voltearla.</p>
+            <h2 class="mono" style="text-align:center; color: var(--primary); margin-bottom: 0.5rem;">Tarjetas de Estudio</h2>
+            <p style="text-align:center; margin-bottom: 2rem;">Repaso de conceptos. Haz clic en la tarjeta para voltearla.</p>
 
             <div class="category-filter-bar">
                 <select class="theme-select" id="fc-cat" onchange="renderFlashcards()" style="max-width:300px;">
@@ -109,13 +226,13 @@
         <section id="s-quiz" class="section">
             <!-- Pantalla Inicial del Quiz -->
             <div class="glass quiz-panel" id="quiz-start-screen">
-                <h2 class="mono" style="color:var(--primary); margin-bottom:1.5rem; text-align:center;">&gt; Unit Test Evaluativo</h2>
-                <p style="margin-bottom:2rem; text-align:center;">Pon a prueba tu lógica y conocimientos del lenguaje compilado. Elige una categoría y comienza el test.</p>
+                <h2 class="mono" style="color:var(--primary); margin-bottom:1.5rem; text-align:center;">Cuestionario de Evaluación</h2>
+                <p style="margin-bottom:2rem; text-align:center;">Pon a prueba tus conocimientos de programación. Elige una categoría y comienza el test.</p>
                 <div style="display:flex; flex-direction:column; gap:1.5rem; max-width:400px; margin:0 auto;">
                     <select class="theme-select" id="quiz-cat" style="width:100%;">
                         <option value="all">TODAS LAS CATEGORÍAS</option>
                     </select>
-                    <button class="glass-btn" onclick="startQuiz()" style="font-size:1.1rem; padding:12px;">💻 INICIAR PROTOCOLO</button>
+                    <button class="glass-btn" onclick="startQuiz()" style="font-size:1.1rem; padding:12px;">INICIAR CUESTIONARIO</button>
                 </div>
             </div>
 
@@ -132,11 +249,11 @@
 
         <!-- SECCIÓN 5: BIBLIOTECA -->
         <section id="s-biblioteca" class="section">
-            <h2 class="mono" style="color: var(--primary); margin-bottom: 0.5rem; text-align:center;">&gt; Code Forge Library</h2>
+            <h2 class="mono" style="color: var(--primary); margin-bottom: 0.5rem; text-align:center;">Biblioteca de Referencia</h2>
             <p style="text-align:center; margin-bottom: 2rem;">Catálogo interactivo de comandos, métodos y estructuras algorítmicas básicas.</p>
 
             <div class="search-bar-container">
-                <input type="text" class="cyber-search" id="lib-search" oninput="renderLibrary()" placeholder="root@cyphercode:~$ search_cmd --query ...">
+                <input type="text" class="cyber-search" id="lib-search" oninput="renderLibrary()" placeholder="Buscar comandos o conceptos...">
             </div>
 
             <div class="library-body">
@@ -152,8 +269,8 @@
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem;">
                 <!-- Debug Protocol Widget -->
                 <div class="glass debug-panel">
-                    <h2 class="mono" style="color:var(--danger); text-shadow:0 0 10px var(--danger-glow); margin-bottom:1rem;">&gt; Debug Protocol</h2>
-                    <p style="margin-bottom:1.5rem; font-size:0.9rem;">El Mainframe tiene errores lógicos en este sector. Haz clic sobre la línea que genera el error de compilación o ejecución y selecciona la solución adecuada.</p>
+                    <h2 class="mono" style="color:var(--danger); margin-bottom:1rem;">Depurador de Código</h2>
+                    <p style="margin-bottom:1.5rem; font-size:0.9rem;">Analiza el código, localiza la línea que genera el error y selecciona la solución adecuada.</p>
                     
                     <div class="debug-code-container" id="debug-container">
                         <!-- Líneas cargadas por app.js -->
@@ -176,13 +293,13 @@
                             <span class="term-circle yellow"></span>
                             <span class="term-circle green"></span>
                         </div>
-                        <div class="terminal-title">root@cyphercode:~$ sandbox</div>
+                        <div class="terminal-title">Terminal Interactiva</div>
                     </div>
                     <div class="terminal-body" id="term-body">
-                        <div class="terminal-output" id="term-output">CypherCode Core v1.0.0 (Matrix Shell)
+                        <div class="terminal-output" id="term-output">Intérprete listo.
 Escribe 'help' para ver una lista de comandos disponibles.</div>
                         <div class="terminal-line">
-                            <span class="mono" style="color:var(--primary); font-weight:bold; white-space:nowrap;">root@cyphercode:~$</span>
+                            <span class="mono" style="color:var(--primary); font-weight:bold; white-space:nowrap;">$</span>
                             <input type="text" class="terminal-input-field" id="term-input" onkeydown="handleTerminalCommand(event)" autocomplete="off" spellcheck="false">
                         </div>
                     </div>
@@ -195,7 +312,7 @@ Escribe 'help' para ver una lista de comandos disponibles.</div>
             <div class="analyzer-layout">
                 <!-- Big-O Slider Analyzer -->
                 <div class="glass analyzer-control-panel">
-                    <h2 class="mono" style="color:var(--primary); margin-bottom:1rem;">&gt; Big-O Analyzer</h2>
+                    <h2 class="mono" style="color:var(--primary); margin-bottom:1rem;">Analizador de Complejidad Big-O</h2>
                     <p style="font-size:0.9rem; margin-bottom:1.5rem;">Ajusta el tamaño del arreglo de datos ($N$) y observa cómo impacta de forma teórica en el consumo de CPU y memoria según el algoritmo seleccionado.</p>
                     
                     <div style="margin-bottom:1.5rem;">
@@ -354,17 +471,23 @@ Escribe 'help' para ver una lista de comandos disponibles.</div>
         </div>
     </div>
 
-    <!-- Achievement Toast Flotante -->
-    <div class="achievement-toast" id="toast-achievement">
-        <span style="font-size:1.5rem;">🏆</span>
+    <!-- Notificación Flotante Simplificada -->
+    <div class="achievement-toast" id="toast-achievement" style="display: none;">
         <div>
-            <div style="font-size:0.7rem; opacity:0.6; letter-spacing:1px;">NUEVA COMPILACIÓN EXITOSA:</div>
-            <div id="toast-achievement-title" style="font-size:0.95rem; color:var(--primary);">¡Logro Desbloqueado!</div>
+            <div id="toast-achievement-title" style="font-size:0.95rem; color:var(--primary);">Notificación</div>
         </div>
     </div>
 
-    <!-- Lógica JavaScript Principal -->
-    <script src="app.js"></script>
+    <!-- Datos de la aplicación -->
+    <script src="data/examples.js"></script>
+    <script src="data/topics.js"></script>
+    <script src="data/flashcards.js"></script>
+    <script src="data/quiz.js"></script>
+    <script src="data/commands.js"></script>
+    <script src="data/debugChallenges.js"></script>
+
+    <!-- Enlace a la lógica principal -->
+    <script src="app.js?v=4"></script>
 
     <!-- Inicialización del Service Worker para PWA Offline -->
     <script>
@@ -376,7 +499,7 @@ Escribe 'help' para ver una lista de comandos disponibles.</div>
             });
         }
     </script>
+    <!-- Highlight.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </body>
 </html>
-
-
