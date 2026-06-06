@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="green">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,22 +8,28 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
     <!-- Vinculación del CSS de diseño Cyberpunk -->
     <link rel="stylesheet" href="styles.css">
     <!-- Configuración PWA y Web App Manifest -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00ff41">
     <!-- Highlight.js for Syntax Highlighting -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 </head>
+
 <body>
 
     <!-- Efecto CRT Scanlines Retro -->
     <div class="crt-overlay"></div>
 
     <!-- Barra de Carga / Simulación Estética -->
-    <div id="loadbar" style="position:fixed; top:0; left:0; width:0; height:3px; background:var(--primary); transition: width 0.4s ease; z-index:9999;"></div>
+    <div id="loadbar"
+        style="position:fixed; top:0; left:0; width:0; height:3px; background:var(--primary); transition: width 0.4s ease; z-index:9999;">
+    </div>
 
     <!-- Fondo de Lluvia Matrix -->
     <canvas id="matrix-canvas"></canvas>
@@ -41,16 +48,27 @@
         <div class="controls">
             <!-- Controles -->
             <!-- Botón del Panel de Personalización -->
-            <button class="glass-btn" id="btn-open-custom" onclick="toggleCustomPanel()" title="Personalización del Sistema">⚙</button>
+            <button class="glass-btn" id="btn-open-custom" onclick="toggleCustomPanel()"
+                title="Personalización del Sistema">⚙</button>
         </div>
     </nav>
 
     <!-- Contenido Principal SPA -->
     <main>
+        <!-- Global Back Button -->
+        <button id="global-back-btn" class="glass-btn" onclick="goBack()"
+            style="display:none; margin-bottom: 1.5rem; font-size: 0.85rem; align-items: center; gap: 0.5rem; width: fit-content;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg> Volver
+        </button>
+
         <!-- SECCIÓN 1: INICIO -->
         <section id="s-inicio" class="section active">
             <div class="hero" style="text-align: left; padding: 1rem 0 2rem 0;">
-                <h1 class="mono" style="font-size: 2.2rem;">&gt;_ <span class="matrix-glitch" id="main-hero-title">CypherCode<span style="color: var(--primary);">.exe</span><span class="blink" style="color: var(--primary);">_</span></span></h1>
+                <h1 class="mono" style="font-size: 2.2rem;">&gt;_ <span class="matrix-glitch"
+                        id="main-hero-title">CypherCode<span style="color: var(--primary);">.exe</span><span
+                            class="blink" style="color: var(--primary);">_</span></span></h1>
                 <p style="color: var(--text-main); opacity: 0.7;">Centro de Aprendizaje de Estructuras y Algoritmos</p>
             </div>
 
@@ -71,7 +89,8 @@
                 <!-- PERFORMANCE -->
                 <div class="stat-panel glass">
                     <div class="panel-header">PERFORMANCE</div>
-                    <span class="subtext" style="display:block; margin-bottom: 1rem; opacity: 0.8; font-size: 0.85rem;">Quiz Scores</span>
+                    <span class="subtext"
+                        style="display:block; margin-bottom: 1rem; opacity: 0.8; font-size: 0.85rem;">Quiz Scores</span>
                     <div class="bar-chart">
                         <div class="y-axis">
                             <span>100</span>
@@ -81,11 +100,31 @@
                             <span>0</span>
                         </div>
                         <div class="bars">
-                            <div class="bar-col"><div class="bar"><div class="fill" style="height: 50%;"></div><span class="bar-val">50</span></div><span>1</span></div>
-                            <div class="bar-col"><div class="bar"><div class="fill" style="height: 60%;"></div><span class="bar-val">60</span></div><span>2</span></div>
-                            <div class="bar-col"><div class="bar"><div class="fill" style="height: 60%;"></div><span class="bar-val">60</span></div><span>3</span></div>
-                            <div class="bar-col"><div class="bar"><div class="fill" style="height: 85%;"></div><span class="bar-val">85</span></div><span>4</span></div>
-                            <div class="bar-col"><div class="bar"><div class="fill" style="height: 100%;"></div><span class="bar-val">100</span></div><span>5</span></div>
+                            <div class="bar-col">
+                                <div class="bar">
+                                    <div class="fill" style="height: 50%;"></div><span class="bar-val">50</span>
+                                </div><span>1</span>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar">
+                                    <div class="fill" style="height: 60%;"></div><span class="bar-val">60</span>
+                                </div><span>2</span>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar">
+                                    <div class="fill" style="height: 60%;"></div><span class="bar-val">60</span>
+                                </div><span>3</span>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar">
+                                    <div class="fill" style="height: 85%;"></div><span class="bar-val">85</span>
+                                </div><span>4</span>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar">
+                                    <div class="fill" style="height: 100%;"></div><span class="bar-val">100</span>
+                                </div><span>5</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -95,20 +134,27 @@
                     <div class="panel-header">SKILL LEVELS</div>
                     <div class="hex-grid">
                         <div class="hex-row">
-                            <div class="hex filled"><div class="hex-inner">Python<br><small>(Advanced)</small></div></div>
+                            <div class="hex filled">
+                                <div class="hex-inner">Python<br><small>(Advanced)</small></div>
+                            </div>
                         </div>
                         <div class="hex-row right">
-                            <div class="hex filled alt"><div class="hex-inner">Logic<br><small>(Expert)</small></div></div>
+                            <div class="hex filled alt">
+                                <div class="hex-inner">Logic<br><small>(Expert)</small></div>
+                            </div>
                         </div>
                         <div class="hex-row">
-                            <div class="hex empty"><div class="hex-inner">Algorithms<br><small>(Mid)</small></div></div>
+                            <div class="hex empty">
+                                <div class="hex-inner">Algorithms<br><small>(Mid)</small></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Quick Access Grid (Práctica) -->
-            <h3 class="mono" style="margin-top: 3rem; margin-bottom: 1rem; opacity: 0.8; color: var(--primary);">// ZONA DE PRÁCTICA</h3>
+            <h3 class="mono" style="margin-top: 3rem; margin-bottom: 1rem; opacity: 0.8; color: var(--primary);">// ZONA
+                DE PRÁCTICA</h3>
             <div class="quick-access-grid">
                 <div class="qa-card glass hover-green" onclick="showSection('flashcards')">
                     <div class="qa-category">MEMORIA</div>
@@ -141,40 +187,57 @@
                 </div>
             </div>
 
-            
-        <!-- MANIFIESTO / FILOSOFÍA -->
-            <div class="glass" style="margin-top: 4rem; margin-bottom: 2rem; text-align: left; border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; gap: 0.5rem; max-width: 900px; margin-inline: auto;">
+
+            <!-- MANIFIESTO / FILOSOFÍA -->
+            <div class="glass"
+                style="margin-top: 4rem; margin-bottom: 2rem; text-align: left; border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; gap: 0.5rem; max-width: 900px; margin-inline: auto;">
                 <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.5rem;">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none"
+                        stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 2v20"></path>
                         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                     </svg>
                     <h3 class="mono" style="margin: 0; color: var(--primary);">Filosofía de la Plataforma</h3>
                 </div>
                 <p style="margin: 0; color: var(--text-main); opacity: 0.8; font-size: 0.95rem; line-height: 1.6;">
-                    <strong>Aprender haciendo, no memorizando.</strong> La misión de CypherCode es proporcionar un entorno inmersivo y sin distracciones para dominar la lógica de programación. No se trata solo de leer teoría pasivamente, sino de interactuar con el código, buscar bugs como un verdadero depurador y visualizar algoritmos abstractos paso a paso. Centraliza tus recursos, entrena tus habilidades y eleva tu nivel técnico.
+                    <strong>Aprender haciendo, no memorizando.</strong> La misión de CypherCode es proporcionar un
+                    entorno inmersivo y sin distracciones para dominar la lógica de programación. No se trata solo de
+                    leer teoría pasivamente, sino de interactuar con el código, buscar bugs como un verdadero depurador
+                    y visualizar algoritmos abstractos paso a paso. Centraliza tus recursos, entrena tus habilidades y
+                    eleva tu nivel técnico.
                 </p>
+            </div>
+
+            <!-- CRÉDITOS DEL DESARROLLADOR -->
+            <div style="margin-bottom: 4rem; text-align: left; max-width: 900px; margin-inline: auto; padding: 0 1rem;">
+                <p style="margin: 0; font-size: 1.1rem; color: var(--text-main);">Desarrollado por <strong style="color: var(--primary);">Emmanuel Vega</strong></p>
+                <p style="margin: 0.3rem 0 0 0; font-size: 1.1rem; color: var(--text-main);">ByteLanguage.exe &copy; 2026</p>
             </div>
         </section>
 
         <!-- SECCIÓN 7: EJEMPLOS -->
         <section id="s-ejemplos" class="section">
-            <h2 class="mono" style="text-align:center; color: var(--primary); margin-bottom: 0.5rem;">Galería de Ejemplos</h2>
-            <p style="text-align:center; margin-bottom: 2rem;">Fragmentos de código extraídos directamente de las tareas de Progra 1 y 2.</p>
+            <h2 class="mono" style="text-align:center; color: var(--primary); margin-bottom: 0.5rem;">Galería de
+                Ejemplos</h2>
+            <p style="text-align:center; margin-bottom: 2rem;">Fragmentos de código extraídos directamente de las tareas
+                de Progra 1 y 2.</p>
 
             <div class="concepts-layout">
                 <aside class="glass sidebar">
-                    <div style="font-weight: bold; font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--primary); padding-bottom:8px; border-bottom:1px solid var(--border-glass); margin-bottom: 10px;">
+                    <div
+                        style="font-weight: bold; font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--primary); padding-bottom:8px; border-bottom:1px solid var(--border-glass); margin-bottom: 10px;">
                         // FILTROS
                     </div>
-                    <div id="examples-filters" style="display:flex; flex-direction:column; gap:0.5rem; max-height: calc(100vh - 200px); overflow-y: auto;">
+                    <div id="examples-filters"
+                        style="display:flex; flex-direction:column; gap:0.5rem; max-height: calc(100vh - 200px); overflow-y: auto;">
                         <!-- Se poblarán los tags dinámicamente -->
                     </div>
                 </aside>
-                
+
                 <div class="glass content-panel" id="example-viewer" style="width: 100%;">
                     <!-- Cargado dinámicamente -->
-                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; opacity:0.6; text-align:center;">
+                    <div
+                        style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; opacity:0.6; text-align:center;">
                         <h2 class="mono" style="color:var(--primary);">&gt; SELECCIONA UN FILTRO</h2>
                         <p>Usa el menú lateral para filtrar los ejemplos disponibles.</p>
                     </div>
@@ -182,12 +245,13 @@
             </div>
         </section>
 
-        
+
         <!-- SECCIÓN 2: CONCEPTOS -->
         <section id="s-conceptos" class="section">
             <div class="concepts-layout">
                 <aside class="glass sidebar">
-                    <div style="font-weight: bold; font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--primary); padding-bottom:8px; border-bottom:1px solid var(--border-glass);">
+                    <div
+                        style="font-weight: bold; font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--primary); padding-bottom:8px; border-bottom:1px solid var(--border-glass);">
                         // UNIDADES TEMÁTICAS
                     </div>
                     <ul id="topic-list" style="margin-top:10px;">
@@ -196,9 +260,11 @@
                 </aside>
                 <div class="glass content-panel" id="topic-detail">
                     <!-- Cargado dinámicamente al hacer clic en un tema -->
-                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; opacity:0.6; text-align:center;">
+                    <div
+                        style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; opacity:0.6; text-align:center;">
                         <h2 class="mono" style="color:var(--primary);">&gt; SELECCIONA UN TEMA</h2>
-                        <p>Usa el menú lateral para abrir los conceptos oficiales y comparar la sintaxis en múltiples lenguajes.</p>
+                        <p>Usa el menú lateral para abrir los conceptos oficiales y comparar la sintaxis en múltiples
+                            lenguajes.</p>
                     </div>
                 </div>
             </div>
@@ -206,15 +272,18 @@
 
         <!-- SECCIÓN 3: FLASHCARDS -->
         <section id="s-flashcards" class="section">
-            <h2 class="mono" style="text-align:center; color: var(--primary); margin-bottom: 0.5rem;">Tarjetas de Estudio</h2>
-            <p style="text-align:center; margin-bottom: 2rem;">Repaso de conceptos. Haz clic en la tarjeta para voltearla.</p>
+            <h2 class="mono" style="text-align:center; color: var(--primary); margin-bottom: 0.5rem;">Tarjetas de
+                Estudio</h2>
+            <p style="text-align:center; margin-bottom: 2rem;">Repaso de conceptos. Haz clic en la tarjeta para
+                voltearla.</p>
 
             <div class="category-filter-bar">
                 <select class="theme-select" id="fc-cat" onchange="renderFlashcards()" style="max-width:300px;">
                     <option value="all">TODAS LAS CATEGORÍAS</option>
                 </select>
                 <button class="glass-btn" onclick="shuffleFC()">⚡ MEZCLAR</button>
-                <span class="mono" id="fc-count" style="display:inline-flex; align-items:center; color:var(--primary);">[0 tarjetas]</span>
+                <span class="mono" id="fc-count"
+                    style="display:inline-flex; align-items:center; color:var(--primary);">[0 tarjetas]</span>
             </div>
 
             <div id="fc-grid">
@@ -226,13 +295,16 @@
         <section id="s-quiz" class="section">
             <!-- Pantalla Inicial del Quiz -->
             <div class="glass quiz-panel" id="quiz-start-screen">
-                <h2 class="mono" style="color:var(--primary); margin-bottom:1.5rem; text-align:center;">Cuestionario de Evaluación</h2>
-                <p style="margin-bottom:2rem; text-align:center;">Pon a prueba tus conocimientos de programación. Elige una categoría y comienza el test.</p>
+                <h2 class="mono" style="color:var(--primary); margin-bottom:1.5rem; text-align:center;">Cuestionario de
+                    Evaluación</h2>
+                <p style="margin-bottom:2rem; text-align:center;">Pon a prueba tus conocimientos de programación. Elige
+                    una categoría y comienza el test.</p>
                 <div style="display:flex; flex-direction:column; gap:1.5rem; max-width:400px; margin:0 auto;">
                     <select class="theme-select" id="quiz-cat" style="width:100%;">
                         <option value="all">TODAS LAS CATEGORÍAS</option>
                     </select>
-                    <button class="glass-btn" onclick="startQuiz()" style="font-size:1.1rem; padding:12px;">INICIAR CUESTIONARIO</button>
+                    <button class="glass-btn" onclick="startQuiz()" style="font-size:1.1rem; padding:12px;">INICIAR
+                        CUESTIONARIO</button>
                 </div>
             </div>
 
@@ -249,11 +321,14 @@
 
         <!-- SECCIÓN 5: BIBLIOTECA -->
         <section id="s-biblioteca" class="section">
-            <h2 class="mono" style="color: var(--primary); margin-bottom: 0.5rem; text-align:center;">Biblioteca de Referencia</h2>
-            <p style="text-align:center; margin-bottom: 2rem;">Catálogo interactivo de comandos, métodos y estructuras algorítmicas básicas.</p>
+            <h2 class="mono" style="color: var(--primary); margin-bottom: 0.5rem; text-align:center;">Biblioteca de
+                Referencia</h2>
+            <p style="text-align:center; margin-bottom: 2rem;">Catálogo interactivo de comandos, métodos y estructuras
+                algorítmicas básicas.</p>
 
             <div class="search-bar-container">
-                <input type="text" class="cyber-search" id="lib-search" oninput="renderLibrary()" placeholder="Buscar comandos o conceptos...">
+                <input type="text" class="cyber-search" id="lib-search" oninput="renderLibrary()"
+                    placeholder="Buscar comandos o conceptos...">
             </div>
 
             <div class="library-body">
@@ -270,8 +345,9 @@
                 <!-- Debug Protocol Widget -->
                 <div class="glass debug-panel">
                     <h2 class="mono" style="color:var(--danger); margin-bottom:1rem;">Depurador de Código</h2>
-                    <p style="margin-bottom:1.5rem; font-size:0.9rem;">Analiza el código, localiza la línea que genera el error y selecciona la solución adecuada.</p>
-                    
+                    <p style="margin-bottom:1.5rem; font-size:0.9rem;">Analiza el código, localiza la línea que genera
+                        el error y selecciona la solución adecuada.</p>
+
                     <div class="debug-code-container" id="debug-container">
                         <!-- Líneas cargadas por app.js -->
                     </div>
@@ -297,10 +373,12 @@
                     </div>
                     <div class="terminal-body" id="term-body">
                         <div class="terminal-output" id="term-output">Intérprete listo.
-Escribe 'help' para ver una lista de comandos disponibles.</div>
+                            Escribe 'help' para ver una lista de comandos disponibles.</div>
                         <div class="terminal-line">
-                            <span class="mono" style="color:var(--primary); font-weight:bold; white-space:nowrap;">$</span>
-                            <input type="text" class="terminal-input-field" id="term-input" onkeydown="handleTerminalCommand(event)" autocomplete="off" spellcheck="false">
+                            <span class="mono"
+                                style="color:var(--primary); font-weight:bold; white-space:nowrap;">$</span>
+                            <input type="text" class="terminal-input-field" id="term-input"
+                                onkeydown="handleTerminalCommand(event)" autocomplete="off" spellcheck="false">
                         </div>
                     </div>
                 </div>
@@ -312,12 +390,17 @@ Escribe 'help' para ver una lista de comandos disponibles.</div>
             <div class="analyzer-layout">
                 <!-- Big-O Slider Analyzer -->
                 <div class="glass analyzer-control-panel">
-                    <h2 class="mono" style="color:var(--primary); margin-bottom:1rem;">Analizador de Complejidad Big-O</h2>
-                    <p style="font-size:0.9rem; margin-bottom:1.5rem;">Ajusta el tamaño del arreglo de datos ($N$) y observa cómo impacta de forma teórica en el consumo de CPU y memoria según el algoritmo seleccionado.</p>
-                    
+                    <h2 class="mono" style="color:var(--primary); margin-bottom:1rem;">Analizador de Complejidad Big-O
+                    </h2>
+                    <p style="font-size:0.9rem; margin-bottom:1.5rem;">Ajusta el tamaño del arreglo de datos ($N$) y
+                        observa cómo impacta de forma teórica en el consumo de CPU y memoria según el algoritmo
+                        seleccionado.</p>
+
                     <div style="margin-bottom:1.5rem;">
-                        <label class="mono" style="font-size:0.85rem; color:var(--primary);">Seleccionar Algoritmo:</label>
-                        <select class="theme-select" id="analyzer-algo" onchange="updateAnalyzer()" style="width:100%; margin-top:0.5rem;">
+                        <label class="mono" style="font-size:0.85rem; color:var(--primary);">Seleccionar
+                            Algoritmo:</label>
+                        <select class="theme-select" id="analyzer-algo" onchange="updateAnalyzer()"
+                            style="width:100%; margin-top:0.5rem;">
                             <option value="o1">Búsqueda por Índice / Hashing — O(1)</option>
                             <option value="ologn">Búsqueda Binaria — O(log N)</option>
                             <option value="on">Búsqueda Lineal / Suma simple — O(N)</option>
@@ -331,7 +414,8 @@ Escribe 'help' para ver una lista de comandos disponibles.</div>
                             <span>Tamaño de Datos (N):</span>
                             <span id="analyzer-n-val" style="color:var(--primary); font-weight:bold;">100</span>
                         </div>
-                        <input type="range" min="1" max="1000" value="100" class="cyber-slider" id="analyzer-slider" oninput="updateAnalyzer()">
+                        <input type="range" min="1" max="1000" value="100" class="cyber-slider" id="analyzer-slider"
+                            oninput="updateAnalyzer()">
                     </div>
 
                     <div style="margin-top:1.5rem; font-size:0.85rem; line-height:1.5; opacity:0.8;" id="analyzer-desc">
@@ -364,9 +448,12 @@ Escribe 'help' para ver una lista de comandos disponibles.</div>
 
             <!-- Trace Mode visualizer widget -->
             <div class="glass trace-panel" style="margin-top:2rem;">
-                <h2 class="mono" style="color:var(--primary); margin-bottom:1rem;">&gt; Trace Mode: Búsqueda Binaria</h2>
-                <p style="font-size:0.9rem; margin-bottom:1.5rem;">Visualiza paso a paso cómo se desplazan los punteros Izquierda (L), Derecha (R) y Medio (M) sobre una colección ordenada para localizar el valor buscado.</p>
-                
+                <h2 class="mono" style="color:var(--primary); margin-bottom:1rem;">&gt; Trace Mode: Búsqueda Binaria
+                </h2>
+                <p style="font-size:0.9rem; margin-bottom:1.5rem;">Visualiza paso a paso cómo se desplazan los punteros
+                    Izquierda (L), Derecha (R) y Medio (M) sobre una colección ordenada para localizar el valor buscado.
+                </p>
+
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
                     <div class="mono" style="font-size:0.9rem;">
                         <span>Buscar número: </span>
@@ -409,23 +496,37 @@ Escribe 'help' para ver una lista de comandos disponibles.</div>
     <!-- Navegación Móvil Inferior -->
     <nav id="mobile-nav" class="glass">
         <button class="mob-btn active" onclick="showSection('inicio', this)">
-            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <svg viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+            </svg>
             Inicio
         </button>
         <button class="mob-btn" onclick="showSection('conceptos', this)">
-            <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z" />
+            </svg>
             Conceptos
         </button>
         <button class="mob-btn" onclick="showSection('flashcards', this)">
-            <svg viewBox="0 0 24 24"><path d="M4 6h2v14H4zm3-4h13c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2zm0 2v12h13V4H7z"/></svg>
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M4 6h2v14H4zm3-4h13c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2zm0 2v12h13V4H7z" />
+            </svg>
             Cards
         </button>
         <button class="mob-btn" onclick="showSection('quiz', this)">
-            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+            </svg>
             Quiz
         </button>
         <button class="mob-btn" onclick="showSection('terminal', this)">
-            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-9 12H5v-2h6v2zm4-4H5V10h10v2zm4-4H5V6h14v2z"/></svg>
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-9 12H5v-2h6v2zm4-4H5V10h10v2zm4-4H5V6h14v2z" />
+            </svg>
             Consola
         </button>
     </nav>
@@ -487,7 +588,7 @@ Escribe 'help' para ver una lista de comandos disponibles.</div>
     <script src="data/debugChallenges.js"></script>
 
     <!-- Enlace a la lógica principal -->
-    <script src="app.js?v=4"></script>
+    <script src="app.js?v=8"></script>
 
     <!-- Inicialización del Service Worker para PWA Offline -->
     <script>
@@ -502,4 +603,5 @@ Escribe 'help' para ver una lista de comandos disponibles.</div>
     <!-- Highlight.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </body>
+
 </html>

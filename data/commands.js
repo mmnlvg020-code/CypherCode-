@@ -38,5 +38,21 @@ const commandsData = [
     "bigO": "O(N) [N = bytes o líneas del archivo]",
     "syntax": "Java: Scanner / BufferedReader | Python: open(file, \"r\")",
     "code": "# Ejemplo Python seguro\nwith open(\"datos.txt\", \"r\") as file:\n    for linea in file:\n        print(linea.strip())"
+  },
+  {
+    "cat": "POO",
+    "name": "Registros / Structs",
+    "desc": "Agrupación de datos bajo una sola estructura sin incluir métodos (solo información).",
+    "bigO": "O(1) acceso",
+    "syntax": "Java: record / Python: dict o @dataclass",
+    "code": "# Python DataClass\nfrom dataclasses import dataclass\n@dataclass\nclass Estudiante:\n    nombre: str\n    edad: int\n\n# Java\npublic record Est(String nombre) {}"
+  },
+  {
+    "cat": "Lógica",
+    "name": "Operadores Lógicos (AND/OR)",
+    "desc": "Permiten encadenar múltiples condiciones. AND requiere que todo sea verdadero, OR requiere que al menos uno lo sea.",
+    "bigO": "O(1)",
+    "syntax": "Java: &&, ||, ! | Python: and, or, not",
+    "code": "# Python\nif edad > 18 and carnet == True:\n    print(\"Acceso total\")\nelif edad > 15 or permiso == True:\n    print(\"Acceso restringido\")"
   }
 ];

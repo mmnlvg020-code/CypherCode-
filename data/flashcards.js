@@ -82,5 +82,29 @@ const flashcardsData = [
     "front": "¿Qué significa el asterisco (*args) como parámetro de una función en Python?",
     "back": "Permite que la función reciba un número indefinido o arbitrario de argumentos, agrupándolos como una tupla.",
     "hint": "Cantidad variable de parámetros."
+  },
+  {
+    "cat": "Fundamentos",
+    "front": "¿Qué es el Alcance (Scope) de una variable?",
+    "back": "Es la región del código donde una variable existe y puede ser accedida. Una variable local declarada dentro de un bucle se destruye al salir de él.",
+    "hint": "Variables locales vs globales."
+  },
+  {
+    "cat": "Fundamentos",
+    "front": "¿Qué es el Casteo (Casting) explícito?",
+    "back": "Es la conversión manual de un tipo de dato a otro, por ejemplo, convertir un String \"10\" a un Integer usando int() o Integer.parseInt().",
+    "hint": "Cambiar la forma del dato."
+  },
+  {
+    "cat": "POO",
+    "front": "¿Cuál es la diferencia principal entre un Registro (Struct) y una Clase?",
+    "back": "Un Registro agrupa solamente datos (atributos), mientras que una Clase agrupa tanto datos como comportamientos (métodos).",
+    "hint": "Datos puros vs Datos + Funciones."
+  },
+  {
+    "cat": "Lógica",
+    "front": "¿Cuál es la diferencia entre el operador lógico AND y OR?",
+    "back": "Con AND, TODAS las condiciones deben ser verdaderas para que se ejecute. Con OR, basta con que UNA de las condiciones sea verdadera.",
+    "hint": "Estricto vs Permisivo."
   }
 ];

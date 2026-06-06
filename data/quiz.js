@@ -141,5 +141,57 @@ const quizData = [
     ],
     "ans": 1,
     "exp": "Python empaqueta automáticamente los valores separados por comas en una Tupla, permitiendo el retorno y desempaquetado múltiple."
+  },
+  {
+    "cat": "Fundamentos",
+    "lang": "java",
+    "q": "¿Qué sucederá si intentas acceder a una variable declarada dentro de un bucle `for` desde fuera de dicho bucle?",
+    "opts": [
+      "El programa compilará pero imprimirá nulo.",
+      "Se producirá un error de compilación porque la variable está fuera de alcance (scope).",
+      "La variable se vuelve global automáticamente.",
+      "Funcionará normalmente."
+    ],
+    "ans": 1,
+    "exp": "En lenguajes como Java, las variables declaradas dentro de un bloque tienen un alcance local a ese bloque. No existen fuera de él."
+  },
+  {
+    "cat": "Fundamentos",
+    "lang": "python",
+    "q": "Si tenemos `if edad > 18 and pase == True:`, ¿qué debe suceder para que la condición se cumpla?",
+    "opts": [
+      "Ambas condiciones deben ser verdaderas al mismo tiempo.",
+      "Solo una de las dos condiciones debe ser verdadera.",
+      "Ninguna de las dos necesita ser verdadera.",
+      "Se generará un error de sintaxis."
+    ],
+    "ans": 0,
+    "exp": "El operador lógico AND exige que todas las partes de la condición se evalúen como verdaderas simultáneamente."
+  },
+  {
+    "cat": "Fundamentos",
+    "lang": "java",
+    "q": "¿Qué método usarías en Java para convertir un String \"100\" en un valor numérico entero?",
+    "opts": [
+      "String.toInt()",
+      "Integer.parseString()",
+      "Integer.parseInt()",
+      "Convert.ToInt32()"
+    ],
+    "ans": 2,
+    "exp": "El casteo o parseo explícito en Java desde cadenas a enteros se realiza frecuentemente usando el método Integer.parseInt()."
+  },
+  {
+    "cat": "POO",
+    "lang": "python",
+    "q": "¿Cuál es la forma más común en Python moderno de crear un Registro (Struct) puramente de datos sin métodos de comportamiento?",
+    "opts": [
+      "Usar un Diccionario o DataClass.",
+      "Crear una Función vacía.",
+      "Usar un bucle While.",
+      "Es imposible en Python."
+    ],
+    "ans": 0,
+    "exp": "Los Diccionarios o el decorador @dataclass son ideales para emular registros puros de datos sin necesidad de escribir toda la lógica de una clase clásica."
   }
 ];

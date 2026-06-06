@@ -424,7 +424,47 @@ nav#mobile-nav {
         font-size: 0.75rem !important;
         padding: 6px 4px !important;
     }
+
+    /* Carousel Buttons on Mobile */
+    .carousel-btn-prev, .carousel-btn-next {
+        position: absolute !important;
+        top: auto !important;
+        bottom: -20px !important;
+        transform: none !important;
+        width: 45px !important;
+        height: 45px !important;
+        background: var(--bg-glass) !important;
+        border: 1px solid var(--primary) !important;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.8) !important;
+    }
+    .carousel-btn-prev {
+        left: 20% !important;
+    }
+    .carousel-btn-next {
+        right: 20% !important;
+        left: auto !important;
+    }
 }
+
+/* ================= CAROUSEL BUTTONS (DESKTOP) ================= */
+.carousel-btn-prev, .carousel-btn-next {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    font-size: 1.2rem;
+    border-radius: 50%;
+    padding: 0;
+    background: rgba(10,15,10,0.6);
+}
+
+.carousel-btn-prev { left: 20px; }
+.carousel-btn-next { right: 20px; }
 
 /* ================= SECTIONS SPECIFICS ================= */
 
@@ -443,7 +483,7 @@ nav#mobile-nav {
 
 .dashboard-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5rem;
     margin-top: 1.5rem;
 }
