@@ -1,110 +1,113 @@
 const flashcardsData = [
-  {
-    "cat": "Fundamentos",
-    "front": "¿Qué significa JVM?",
-    "back": "Java Virtual Machine (Máquina Virtual de Java). Es el motor que compila el bytecode y lo ejecuta en la máquina real.",
-    "hint": "Traduce el código intermedio (.class) a lenguaje de máquina."
-  },
-  {
-    "cat": "Fundamentos",
-    "front": "¿Cuál es la diferencia básica entre int y double?",
-    "back": "int almacena números enteros de 32 bits sin decimales. double almacena números de punto flotante de 64 bits con precisión decimal.",
-    "hint": "Piensa en números con punto decimal vs números de conteo exacto."
-  },
-  {
-    "cat": "Sintaxis",
-    "front": "¿Qué ocurre si omites el comando \"break\" en un bloque switch?",
-    "back": "Se produce una caída libre (fall-through). El programa continúa ejecutando las líneas del caso siguiente de forma secuencial.",
-    "hint": "No se detiene al encontrar una coincidencia."
-  },
-  {
-    "cat": "Sintaxis",
-    "front": "¿Cuándo se prefiere un bucle \"while\" sobre un bucle \"for\"?",
-    "back": "Se prefiere \"while\" cuando no conocemos de antemano el número exacto de iteraciones que requerirá el programa.",
-    "hint": "Depende enteramente del cumplimiento de una condición cambiante."
-  },
-  {
-    "cat": "POO",
-    "front": "¿Qué es el Principio de Encapsulamiento?",
-    "back": "Es la ocultación del estado interno de un objeto (atributos), restringiendo el acceso directo y exponiéndolo solo por métodos públicos (get/set).",
-    "hint": "Mantiene las variables privadas."
-  },
-  {
-    "cat": "Arrays",
-    "front": "¿En qué índice inician los arreglos en Java y Python?",
-    "back": "Comienzan siempre en el índice 0. Por ende, el último elemento accesible de un arreglo de tamaño N es N-1.",
-    "hint": "Indexación de origen cero."
-  },
-  {
-    "cat": "POO",
-    "front": "¿Para qué sirve el método constructor en una clase?",
-    "back": "Es un método especial que se invoca automáticamente al instanciar un objeto (usando \"new\") para inicializar sus atributos.",
-    "hint": "Lleva el mismo nombre que la clase en Java."
-  },
-  {
-    "cat": "Excepciones",
-    "front": "¿Cuál es la diferencia entre \"throw\" y \"throws\" en Java?",
-    "back": "throw se usa para lanzar explícitamente una excepción concreta. throws se coloca en la firma del método para listar las excepciones que este puede emitir.",
-    "hint": "Lanzar un error vs declarar que un método podría lanzar un error."
-  },
-  {
-    "cat": "Control",
-    "front": "¿Para qué sirve la sentencia \"break\" en un bloque switch?",
-    "back": "Para salir inmediatamente del bloque switch una vez que se ha ejecutado el caso correspondiente, evitando que se ejecuten los siguientes.",
-    "hint": "Evita la caída libre o \"fall-through\"."
-  },
-  {
-    "cat": "Arreglos",
-    "front": "¿Cuál es la principal ventaja de un ArrayList sobre un arreglo estático?",
-    "back": "Un ArrayList puede redimensionarse dinámicamente en tiempo de ejecución, mientras que un arreglo normal tiene un tamaño fijo desde su creación.",
-    "hint": "Se ajusta a la cantidad de elementos que le agregues."
-  },
-  {
-    "cat": "POO",
-    "front": "¿Qué es el Polimorfismo?",
-    "back": "Es la capacidad de los objetos de diferentes clases hijas de responder de manera distinta al mismo método definido en una clase padre.",
-    "hint": "Múltiples formas para un mismo comportamiento."
-  },
-  {
-    "cat": "Fundamentos",
-    "front": "¿Cuál es la diferencia entre \"/\" y \"//\" en Python?",
-    "back": "El operador \"/\" devuelve el resultado exacto con decimales (float), mientras que \"//\" es la división entera, es decir, trunca o elimina la parte decimal.",
-    "hint": "Uno da fracciones, otro solo enteros."
-  },
-  {
-    "cat": "Control",
-    "front": "¿Qué significan los tres argumentos en un range(1, 10, 2)?",
-    "back": "El primero es el inicio (1), el segundo es el límite no inclusivo (hasta 9), y el tercero es el salto o incremento de a cuánto (de a 2).",
-    "hint": "Inicio, Fin-1, Incremento."
-  },
-  {
-    "cat": "Avanzado",
-    "front": "¿Qué significa el asterisco (*args) como parámetro de una función en Python?",
-    "back": "Permite que la función reciba un número indefinido o arbitrario de argumentos, agrupándolos como una tupla.",
-    "hint": "Cantidad variable de parámetros."
-  },
-  {
-    "cat": "Fundamentos",
-    "front": "¿Qué es el Alcance (Scope) de una variable?",
-    "back": "Es la región del código donde una variable existe y puede ser accedida. Una variable local declarada dentro de un bucle se destruye al salir de él.",
-    "hint": "Variables locales vs globales."
-  },
-  {
-    "cat": "Fundamentos",
-    "front": "¿Qué es el Casteo (Casting) explícito?",
-    "back": "Es la conversión manual de un tipo de dato a otro, por ejemplo, convertir un String \"10\" a un Integer usando int() o Integer.parseInt().",
-    "hint": "Cambiar la forma del dato."
-  },
-  {
-    "cat": "POO",
-    "front": "¿Cuál es la diferencia principal entre un Registro (Struct) y una Clase?",
-    "back": "Un Registro agrupa solamente datos (atributos), mientras que una Clase agrupa tanto datos como comportamientos (métodos).",
-    "hint": "Datos puros vs Datos + Funciones."
-  },
-  {
-    "cat": "Lógica",
-    "front": "¿Cuál es la diferencia entre el operador lógico AND y OR?",
-    "back": "Con AND, TODAS las condiciones deben ser verdaderas para que se ejecute. Con OR, basta con que UNA de las condiciones sea verdadera.",
-    "hint": "Estricto vs Permisivo."
-  }
-];
+  { cat: 'Pronombres', q: '¿Objeto pronoun de "I"?', a: 'me', hint: 'Call me! / She told me.' },
+  { cat: 'Pronombres', q: '¿Objeto pronoun de "he"?', a: 'him', hint: 'She loves him. / I told him.' },
+  { cat: 'Pronombres', q: '¿Objeto pronoun de "they"?', a: 'them', hint: 'I see them. / She told them.' },
+  { cat: 'Pronombres', q: '¿Objeto pronoun de "we"?', a: 'us', hint: 'They need us. / He helped us.' },
+  { cat: 'Artículos', q: '"___ sun sets in the west."', a: 'The', hint: 'El sol es único → THE' },
+  { cat: 'Artículos', q: '"She found ___ umbrella."', a: 'an', hint: 'Umbrella empieza con vocal → AN' },
+  { cat: 'Artículos', q: '"He is playing ___ guitar."', a: 'the', hint: 'Instrumento específico → THE' },
+  { cat: 'Artículos', q: '"I bought ___ new phone."', a: 'a', hint: 'Indefinido, consonante → A' },
+  { cat: 'Simple Present', q: '"She ___ (study) every night." 3ra persona', a: 'studies', hint: 'Consonante + y → ies' },
+  { cat: 'Simple Present', q: '"He ___ (not/like) coffee."', a: "doesn't like", hint: '3ra persona → doesn\'t' },
+  { cat: 'Simple Present', q: '"___ she work here?" Pregunta.', a: 'Does', hint: 'She → Does (3ra persona)' },
+  { cat: 'Frecuencia', q: 'Adverbio de frecuencia al 0%', a: 'never', hint: 'Never = jamás / nunca' },
+  { cat: 'Frecuencia', q: 'Adverbio de frecuencia al 100%', a: 'always', hint: 'Always = siempre' },
+  { cat: 'Frecuencia', q: 'Posición en: "She ___ is happy."', a: 'always (después de is)', hint: 'Después del verbo to be' },
+  { cat: 'Frecuencia', q: '¿Qué WH-Question se usa para preguntar por la frecuencia de una acción?', a: 'How often', hint: 'How often do you exercise?' },
+  { cat: 'Simple Past', q: 'Pasado de "go"', a: 'went', hint: 'Irregular: go → went' },
+  { cat: 'Simple Past', q: 'Pasado de "buy"', a: 'bought', hint: 'Irregular: buy → bought' },
+  { cat: 'Simple Past', q: 'Pasado de "eat"', a: 'ate', hint: 'Irregular: eat → ate' },
+  { cat: 'Simple Past', q: '"play + ed" → pronunciación', a: '/d/', hint: 'Sonido sonoro al final → /d/' },
+  { cat: 'Simple Past', q: '"wash + ed" → pronunciación', a: '/t/', hint: 'Sonido sordo al final → /t/' },
+  { cat: 'Simple Past', q: '"start + ed" → pronunciación', a: '/ɪd/', hint: 'Termina en /t/ → /ɪd/' },
+  { cat: 'Simple Past', q: '"She ___ (not/go) yesterday."', a: "didn't go", hint: 'Negativo pasado = didn\'t + verbo base' },
+  { cat: 'Comparativos', q: 'Comparativo de "good"', a: 'better', hint: 'Irregular: good → better' },
+  { cat: 'Comparativos', q: 'Comparativo de "bad"', a: 'worse', hint: 'Irregular: bad → worse' },
+  { cat: 'Comparativos', q: '"Tokyo is ___ (big) than London."', a: 'bigger', hint: 'CVC de 1 sílaba → dobla + er' },
+  { cat: 'Comparativos', q: '"That is ___ (comfortable) than this."', a: 'more comfortable', hint: '2+ sílabas → more + adj' },
+  { cat: 'Be Going To', q: '"I ___ (go) to study tonight."', a: "am going to study", hint: 'I → am going to + verb' },
+  { cat: 'Be Going To', q: '"___ she going to eat fish?"', a: 'Is', hint: 'She → Is going to' },
+  { cat: 'There is/are', q: '"___ some cafes in town."', a: 'There are', hint: 'Plural → there are' },
+  { cat: 'There is/are', q: '"___ a hospital here?" Pregunta.', a: 'Is there', hint: 'Singular → Is there?' },
+  { cat: 'Vocab', q: '¿Qué significa "Hit the books"?', a: 'Ponerse a estudiar', hint: 'Idiom muy común en inglés' },
+  { cat: 'Vocab', q: '¿Qué significa "Piece of cake"?', a: 'Muy fácil / pan comido', hint: 'Idiom de facilidad' },
+  { cat: 'Vocab', q: '¿Qué significa "Ring a bell"?', a: 'Sonar familiar', hint: 'Como cuando casi recordás algo' },
+  { cat: 'Vocab', q: '"What is she ___?" → personalidad', a: 'like', hint: '"What is she like?" → describe carácter' },
+  { cat: 'Vocab', q: '"What does she ___ like?" → apariencia', a: 'look', hint: '"look like" = apariencia física' },
+  { cat: 'Vocab (Vida Diaria)', q: '¿Qué significa "hang out"?', a: 'Pasar el rato', hint: 'I like to hang out with friends.' },
+  { cat: 'Vocab (Vida Diaria)', q: '¿Qué significa "catch up"?', a: 'Ponerse al día', hint: "Let's catch up this weekend." },
+  { cat: 'Vocab (Vida Diaria)', q: '¿Qué significa "work out"?', a: 'Hacer ejercicio', hint: 'I work out at the gym.' },
+  { cat: 'Simple Past', q: '"We ___ (buy) groceries yesterday."', a: 'bought', hint: 'Irregular: buy → bought' },
+  { cat: 'Simple Present', q: '"The train ___ (leave) at 8:00."', a: 'leaves', hint: 'Tercera persona singular (it) → leaves' },
+  // Demonstratives
+  { cat: 'Demonstratives', q: '¿Cuál demostrativo usas para algo CERCANO y SINGULAR?', a: 'this', hint: 'This book / This is my friend.' },
+  { cat: 'Demonstratives', q: '¿Cuál demostrativo usas para algo LEJANO y PLURAL?', a: 'those', hint: 'Those cars / Those are expensive.' },
+  { cat: 'Demonstratives', q: '"___ are my keys." (cerca, plural)', a: 'These', hint: 'Cerca + plural = These' },
+  { cat: 'Demonstratives', q: '"Is ___ your bag?" (lejos, singular)', a: 'that', hint: 'Lejos + singular = that' },
+  // Imperatives
+  { cat: 'Imperatives', q: '¿Cómo formas un imperativo negativo?', a: "Don't + verbo", hint: "Don't run / Don't talk." },
+  { cat: 'Imperatives', q: '¿Qué palabra usas para sugerir hacer algo juntos?', a: "Let's", hint: "Let's go / Let's eat." },
+  // Tipos de Verbos
+  { cat: 'Tipos de Verbos', q: '¿Los verbos Stative pueden usarse con -ing?', a: 'No. Nunca.', hint: 'I know (correcto). I am knowing (¡MAL!)' },
+  { cat: 'Tipos de Verbos', q: '¿Cuál es un verbo Modal?', a: 'Can, should, must', hint: 'No llevan "to" ni -s: She can swim.' },
+  { cat: 'Tipos de Verbos', q: 'Do, be y have son verbos de tipo...', a: 'Auxiliary (Auxiliares)', hint: 'Ayudan a formar tiempos y preguntas.' },
+  // ── INGLÉS TÉCNICO ──────────────────────────────────────────────────
+  // False Friends & Cognates
+  { cat: 'False Friends', q: '¿Qué significa "actual" en inglés?', a: 'Real / verdadero', hint: 'Actual ≠ Actual (esp.). "The actual cost" = el costo real.' },
+  { cat: 'False Friends', q: '¿Qué significa "library" en inglés?', a: 'Biblioteca', hint: 'Library ≠ Librería. Librería = Bookstore.' },
+  { cat: 'False Friends', q: '¿Qué significa "large" en inglés?', a: 'Grande', hint: 'Large ≠ Largo. Largo = Long.' },
+  { cat: 'False Friends', q: '¿Qué significa "exit" en inglés?', a: 'Salida', hint: 'Exit ≠ Éxito. Éxito = Success.' },
+  { cat: 'False Friends', q: '¿Qué es un "cognate"?', a: 'Palabra similar en dos idiomas con el mismo significado', hint: 'Ej: "information" (ES) = "information" (EN).' },
+  // Parts of Speech
+  { cat: 'Parts of Speech', q: '¿Qué función cumple un Adjective (adjetivo)?', a: 'Modifica/describe a un sustantivo', hint: 'The FAST server / A BROKEN link.' },
+  { cat: 'Parts of Speech', q: '¿Qué función cumple un Adverb (adverbio)?', a: 'Modifica un verbo, adjetivo u otro adverbio', hint: 'The system runs QUICKLY. It is VERY fast.' },
+  { cat: 'Parts of Speech', q: 'En "The server crashed.", ¿qué función cumple "server"?', a: 'Noun (sustantivo)', hint: 'Es el sujeto de la oración.' },
+  { cat: 'Parts of Speech', q: 'En una Noun Phrase, ¿cuál es la palabra núcleo?', a: 'El sustantivo (noun)', hint: '"A fast network" → network es el núcleo.' },
+  // Phrasal Verbs Técnicos
+  { cat: 'Phrasal Verbs IT', q: '¿Qué significa "boot up"?', a: 'Encender/iniciar un sistema', hint: 'Boot up the server before running the script.' },
+  { cat: 'Phrasal Verbs IT', q: '¿Qué significa "log in"?', a: 'Iniciar sesión', hint: 'Log in with your credentials.' },
+  { cat: 'Phrasal Verbs IT', q: '¿Qué significa "shut down"?', a: 'Apagar un sistema', hint: 'Shut down the server after backup.' },
+  { cat: 'Phrasal Verbs IT', q: '¿Qué significa "roll back"?', a: 'Revertir a una versión anterior', hint: 'We need to roll back the update.' },
+  // IT Definitions
+  { cat: 'IT Vocab', q: '¿Qué es "latency" en redes?', a: 'El tiempo de demora en transmitir datos', hint: 'High latency = conexión lenta o con lag.' },
+  { cat: 'IT Vocab', q: '¿Qué significa "deploy"?', a: 'Desplegar/publicar una aplicación', hint: 'We deploy the app to production every Friday.' },
+  { cat: 'IT Vocab', q: '¿Qué significa "bandwidth"?', a: 'Ancho de banda (capacidad de transferencia de datos)', hint: 'More bandwidth = faster downloads.' },
+  { cat: 'IT Vocab', q: '¿Qué significa "firmware"?', a: 'Software integrado permanentemente en un hardware', hint: 'Router firmware controls its basic operations.' },
+  // ── NUEVO: INGLÉS 1 (VERB TO BE, POSSESSIVES, COUNTABLES) ──
+  { cat: 'Verb To Be', q: '¿Cuál es el verbo To Be para "I"?', a: 'am', hint: 'I ___ a programmer.' },
+  { cat: 'Verb To Be', q: '¿Cuál es el verbo To Be para "She/He/It"?', a: 'is', hint: 'She ___ 25 years old.' },
+  { cat: 'Verb To Be', q: '¿Cuál es el verbo To Be para "We/You/They"?', a: 'are', hint: 'They ___ ready.' },
+  { cat: 'Verb To Be', q: 'En inglés, ¿la edad se "tiene" (have) o se "es" (be)?', a: 'Se ES (Verb To Be)', hint: 'I am 20 years old.' },
+  { cat: 'Posesivos', q: 'Adjetivo posesivo para "I" (mi/mis)', a: 'my', hint: 'This is ___ laptop.' },
+  { cat: 'Posesivos', q: 'Adjetivo posesivo para "She" (su de ella)', a: 'her', hint: '___ name is Sarah.' },
+  { cat: 'Posesivos', q: 'Pronombre posesivo para "You" (tuyo)', a: 'yours', hint: 'This book is ___.' },
+  { cat: 'Contables/Incont.', q: '¿"Water" es contable o incontable?', a: 'Incontable', hint: 'Los líquidos no se cuentan con números directos.' },
+  { cat: 'Contables/Incont.', q: '¿Qué usas para preguntar por cantidad INCONTABLE (ej. tiempo, dinero)?', a: 'How much', hint: '___ money do you have?' },
+  { cat: 'Contables/Incont.', q: '¿Qué usas para preguntar por cantidad CONTABLE (ej. manzanas, autos)?', a: 'How many', hint: '___ apples do you want?' },
+  // ── NUEVO: PREFIJOS Y SUFIJOS ──
+  { cat: 'Afijos', q: '¿Qué significa el prefijo "re-" (ej. reboot)?', a: 'Otra vez / de nuevo', hint: 'Reboot = volver a iniciar.' },
+  { cat: 'Afijos', q: '¿Qué significan los prefijos "un-", "dis-", "in-"?', a: 'Negación / lo opuesto', hint: 'Uninstall = desinstalar.' },
+  { cat: 'Afijos', q: '¿Qué tipo de palabra crean los sufijos "-tion" o "-ment"?', a: 'Sustantivos', hint: 'Installation, development.' },
+  { cat: 'Afijos', q: '¿Qué tipo de palabra crea el sufijo "-able" (ej. scalable)?', a: 'Adjetivos', hint: 'Que se puede hacer (escalable).' },
+  { cat: 'Afijos', q: '¿Qué indica el sufijo "-er" o "-or" (ej. server, developer)?', a: 'Persona o cosa que hace la acción', hint: 'Programmer = el que programa.' },
+  // ── NUEVO: PLURALES, NOUN PHRASES, CONNECTORS ──
+  { cat: 'Plurales', q: '¿Plural de los sustantivos que terminan en s, x, z, sh, ch?', a: 'Se agrega -es', hint: 'Ejemplo: bus → buses, watch → watches.' },
+  { cat: 'Plurales', q: '¿Plural de los sustantivos que terminan en consonante + y?', a: 'Se cambia a -ies', hint: 'Ejemplo: city → cities.' },
+  { cat: 'Plurales', q: '¿Plural irregular de "man" y "child"?', a: 'men / children', hint: 'Son irregulares, no usan -s ni -es.' },
+  { cat: 'Noun Phrases', q: 'En la frase "a wireless network device", ¿cuál es el Head Noun?', a: 'device', hint: 'El objeto principal de la frase siempre va al final.' },
+  { cat: 'Noun Phrases', q: '¿En qué orden se suele traducir una Noun Phrase en español?', a: 'De atrás hacia adelante', hint: 'Security (2) threats (1) = Amenazas de seguridad.' },
+  { cat: 'Connectors', q: '¿Qué función cumple el conector "Therefore"?', a: 'Indica resultado / efecto (por lo tanto)', hint: 'Ejemplo: The system crashed. Therefore, data was lost.' },
+  { cat: 'Connectors', q: '¿Qué función cumple el conector "However"?', a: 'Indica contraste (sin embargo)', hint: 'Es seguro. However, es lento.' },
+  { cat: 'Connectors', q: '¿Para qué sirven los conectores "First", "Then", "Next"?', a: 'Indican secuencia (primero, luego, después)', hint: 'Paso 1, Paso 2. First, reboot the PC. Then...' },
+  // ── NUEVO: PRESENT CONTINUOUS & WH-QUESTIONS ──
+  { cat: 'Present Continuous', q: '¿Cómo se forma el Present Continuous afirmativo?', a: 'Sujeto + am/is/are + verbo-ing', hint: 'Acciones en progreso: She is studying.' },
+  { cat: 'Present Continuous', q: '¿Para qué más se usa el Present Continuous además de "ahora mismo"?', a: 'Planes futuros cercanos confirmados', hint: 'I am working tomorrow.' },
+  { cat: 'WH-Questions', q: '¿Qué pregunta "Where"?', a: 'Lugar (dónde)', hint: 'Where does she live?' },
+  { cat: 'WH-Questions', q: '¿Qué pregunta "Why"?', a: 'Razón / Motivo (por qué)', hint: 'Why are you late?' },
+  { cat: 'WH-Questions', q: '¿Qué pregunta "When"?', a: 'Tiempo / Cuándo', hint: 'When did they arrive?' },
+  // ── NUEVO: READING STRATEGIES ──
+  { cat: 'Reading', q: '¿Qué es una Topic Sentence?', a: 'La oración que define la idea principal del párrafo', hint: 'Casi siempre es la primera oración.' },
+  { cat: 'Reading', q: '¿Qué indican las palabras "always", "never", "only" en un examen de True/False?', a: 'Restricciones absolutas', hint: 'Suelen hacer que una opción sea falsa si el texto original usa palabras como "sometimes".' },
+  { cat: 'Reading', q: '¿En qué consiste la técnica de "Skimming"?', a: 'Leer por encima para captar la idea general', hint: 'Skim = Idea General.' },
+  { cat: 'Reading', q: '¿En qué consiste la técnica de "Scanning"?', a: 'Buscar visualmente datos específicos (números, nombres)', hint: 'Scan = Dato Específico (como hacer Ctrl+F).' }
+];
