@@ -1,702 +1,609 @@
 <!DOCTYPE html>
-<html lang="es">
-<!-- 
-  ==============================================================================
-  ARCHIVO PRINCIPAL DE VISTA (INDEX.HTML)
-  ==============================================================================
-  Este archivo define toda la estructura y el contenido visual (DOM) de la Guía de Inglés.
-  Al ser una Single Page Application (SPA), todas las "pantallas" coexisten en este archivo
-  y se muestran u ocultan mediante JavaScript (app.js).
-  
-  Estructura Principal:
-  1. <head>: Metadatos, fuentes y enlaces a estilos CSS.
-  2. <header>: Barra de navegación estática en la parte superior.
-  3. <div class="section">: Cada uno de estos bloques representa una "pantalla" (Inicio, Gramática, etc.)
-  ==============================================================================
--->
+<html lang="es" data-theme="green">
 
 <head>
-  <!-- Codificación de caracteres para aceptar tildes y ñ -->
-  <meta charset="UTF-8">
-  <!-- Configuración para que se vea bien en dispositivos móviles (Responsive) -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Título que aparece en la pestaña del navegador -->
-  <title>ByteLanguage.exe - Inglés Técnico</title>
-  
-  <!-- Importación de fuentes desde Google Fonts para el estilo "hacker/tech" -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;700&family=Syne:wght@700;800&family=Share+Tech+Mono&family=JetBrains+Mono:wght@400;700&family=VT323&display=swap"
-    rel="stylesheet">
-    
-  <!-- Vinculación de la hoja de estilos principal (styles.css) -->
-  <link rel="stylesheet" href="styles.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CypherCode — Guía de Programación I</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <!-- Vinculación del CSS de diseño Cyberpunk -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Configuración PWA y Web App Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00ff41">
+    <!-- Highlight.js for Syntax Highlighting -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
 </head>
 
 <body>
 
-  <!-- 
-    ======================================================================
-    ESFERAS DE FONDO (Diseño visual)
-    Estas son las dos esferas brillantes que aparecen difuminadas en el fondo.
-    Se controlan puramente con CSS (.glow-spheres)
-    ====================================================================== 
-  -->
-  <div class="glow-spheres">
-    <div class="sphere sphere-green"></div>
-    <div class="sphere sphere-blue"></div>
-  </div>
+    <!-- Efecto CRT Scanlines Retro -->
+    <div class="crt-overlay"></div>
 
-  <!-- 
-    ======================================================================
-    BARRA DE NAVEGACIÓN SUPERIOR (Header)
-    ====================================================================== 
-  -->
-  <header>
-    <!-- Logo principal con animación de parpadeo en el guión bajo (_) -->
-    <div class="logo">ByteLanguage<span class="hl">.exe</span><span class="blink">_</span></div>
-    <!-- 
-      Botones de navegación principal (para PC/Tablets).
-      En móviles estos botones se ocultan y se muestra la barra inferior.
-      Cada botón ejecuta la función showSection() de app.js para cambiar de pantalla.
-    -->
-    <nav>
-      <button class="nav-btn active" onclick="showSection('home')">Inicio</button>
-      <button class="nav-btn" onclick="showSection('grammar')">Gramática</button>
-      <button class="nav-btn" onclick="showSection('flashcards')">Flashcards</button>
-      <button class="nav-btn" onclick="showSection('verbs')">Vocabulario 🔤</button>
+    <!-- Barra de Carga / Simulación Estética -->
+    <div id="loadbar"
+        style="position:fixed; top:0; left:0; width:0; height:3px; background:var(--primary); transition: width 0.4s ease; z-index:9999;">
+    </div>
+
+    <!-- Fondo de Lluvia Matrix -->
+    <canvas id="matrix-canvas"></canvas>
+
+    <!-- Navegación de Escritorio -->
+    <nav id="desktop-nav" class="glass">
+        <div class="nav-brand mono">
+            CypherCode
+        </div>
+        <div class="nav-links">
+            <button class="nav-btn glass-btn active" onclick="showSection('inicio', this)">Inicio</button>
+            <button class="nav-btn glass-btn" onclick="showSection('conceptos', this)">Conceptos</button>
+            <button class="nav-btn glass-btn" onclick="showSection('biblioteca', this)">Biblioteca</button>
+            <button class="nav-btn glass-btn" onclick="showSection('referencia', this)">Referencia</button>
+        </div>
+        <div class="controls">
+            <!-- Controles -->
+            <!-- Botón del Panel de Personalización -->
+            <button class="glass-btn" id="btn-open-custom" onclick="toggleCustomPanel()"
+                title="Personalización del Sistema">⚙</button>
+        </div>
     </nav>
 
-    <!-- Controles de estado y configuración (derecha del Header) -->
-    <div style="display: flex; gap: 1rem; align-items: center;">
-      <!-- Punto verde de estado (Offline/Online), controlado por el Service Worker -->
-      <div id="networkStatusDot" title="Conectado" style="width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent);"></div>
-      
-      <!-- Botón para alternar entre Tema Claro y Tema Oscuro -->
-      <button class="toggle-mode" onclick="toggleMode()" title="Cambiar modo">
-        <!-- Icono inicial (Luna o Sol), se reemplaza en JS -->
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="4" />
-          <path
-            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-        </svg>
-      </button>
-    </div>
-  </header>
-
-  <!-- 
-    ======================================================================
-    SECCIÓN 1: INICIO (HOME)
-    Es la pantalla principal (Dashboard) que ve el usuario al entrar.
-    ====================================================================== 
-  -->
-  <div id="home" class="section active">
-    <div class="hero">
-      <div class="hero-tag">INGLÉS 1 & 2 → INGLÉS TÉCNICO TI</div>
-
-      <!-- Título principal con efecto Glitch (matriz hacker) -->
-      <h1 style="font-family: var(--tech); letter-spacing: -1px;"><span class="matrix-glitch" id="main-hero-title" data-text="ByteLanguage.exe_">ByteLanguage<span class="hl">.exe</span><span class="blink" style="color: var(--accent);">_</span></span><br><span style="font-size: 0.45em; font-family: var(--sans); letter-spacing: 0; text-transform: none; color: var(--text-muted); font-weight: 500;">Tu guía de repaso técnico</span></h1>
-      <p>Tu plataforma centralizada para dominar el Inglés General y el Inglés Técnico de TI. Gramática, vocabulario, flashcards y quizzes.</p>
-      
-      <!-- Fila de Estadísticas Rápidas (Se rellenan automáticamente desde app.js al iniciar) -->
-      <div class="stats-row">
-        <div class="stat-chip"><b id="stat-topics">0</b> temas cubiertos</div>
-        <div class="stat-chip"><b id="stat-flashcards">0</b> flashcards</div>
-        <div class="stat-chip"><b id="stat-quiz">0</b> preguntas de quiz</div>
-        <div class="stat-chip"><b id="stat-verbs">0</b> verbos irregulares</div>
-      </div>
-
-      <!-- 
-        =========================================================
-        CUADRÍCULA DE ACCESO RÁPIDO Y MINIJUEGOS
-        Contiene accesos directos al "Verbo del día", Quiz, etc.
-        ========================================================= 
-      -->
-      <div class="quick-access-grid">
-        <div class="qa-card" id="daily-verb-card" style="cursor: default; height: 130px;">
-          <div class="qa-category">VERBO DEL DÍA</div>
-          <div class="qa-title" id="daily-verb-title">Cargando...</div>
-          <div class="qa-action" id="daily-verb-desc" style="cursor: default;">
-            ...
-          </div>
-        </div>
-
-        <div class="qa-card" id="record-card" style="cursor: default; height: 130px;">
-          <div class="qa-category" style="color: #ffd93d;">🏆 RÉCORD HISTÓRICO</div>
-          <div class="qa-title" id="record-title" style="margin-bottom: 0;">0%</div>
-          <div class="qa-action" id="record-desc" style="cursor: default; gap: 15px; width: 100%; justify-content: center; font-size: 0.95rem;">
-            <span style="color: var(--accent);">Aciertos: <b id="record-correct">0</b></span>
-            <span style="color: #ff6b6b;">Errores: <b id="record-incorrect">0</b></span>
-          </div>
-        </div>
-
-        <div class="qa-card hover-green" onclick="showSection('quiz')">
-          <div class="qa-category">EVALUACIÓN</div>
-          <div class="qa-title">Quiz de<br>Conocimientos</div>
-          <div class="qa-action">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14"></path>
-              <path d="M12 5l7 7-7 7"></path>
-            </svg>
-            Tocá para iniciar quiz
-          </div>
-        </div>
-
-        <div class="qa-card hover-blue" onclick="showSection('minigames')">
-          <div class="qa-category">DIVERSIÓN Y PRÁCTICA</div>
-          <div class="qa-title">Arcade /<br>Minijuegos 🎮</div>
-          <div class="qa-action">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14"></path>
-              <path d="M12 5l7 7-7 7"></path>
-            </svg>
-            Explorar catálogo
-          </div>
-        </div>
-      </div>
-
-      <!-- MANIFIESTO / FILOSOFÍA -->
-      <div
-        style="margin-top: 3rem; text-align: left; background: var(--surface2); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem 2rem; display: flex; flex-direction: column; gap: 0.5rem; max-width: 800px; margin-inline: auto;">
-        <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.5rem;">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none"
-            stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2v20"></path>
-            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-          </svg>
-          <h3 style="margin: 0; font-family: var(--display); color: var(--text);">Filosofía de la Plataforma</h3>
-        </div>
-        <p style="margin: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
-          <strong>Centralizar, no reemplazar.</strong> La misión de este proyecto no es apropiarse del contenido
-          impartido por los profesores, sino organizar y centralizar toda la materia de estudio en un entorno digital
-          optimizado. El sistema ayuda a que los estudiantes tengan que rastrear apuntes dispersos de cuatrimestres
-          pasados o perder el hilo de conceptos clave. Aquí, todo el historial académico y los recursos están
-          estructurados para tu aprendizaje activo.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- 
-    ======================================================================
-    SECCIÓN MINIJUEGOS (ARCADE)
-    ====================================================================== 
-  -->
-  <div id="minigames" class="section">
-    <div class="section-title">Arcade / Minijuegos</div>
-    <div class="section-sub">Elegí un minijuego rápido para entrenar tus reflejos y memoria</div>
-    <button class="grammar-back-btn" style="display:inline-flex; align-items:center; gap:0.5rem; margin-bottom:1.5rem;" onclick="showSection('home')">← Volver al inicio</button>
-    
-    <div class="quick-access-grid">
-        <div class="qa-card hover-blue" onclick="showSection('blast')">
-          <div class="qa-category">VELOCIDAD</div>
-          <div class="qa-title">Modo<br>Ráfaga ⚡</div>
-          <div class="qa-action">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14"></path>
-              <path d="M12 5l7 7-7 7"></path>
-            </svg>
-            Tocá para iniciar ráfaga
-          </div>
-        </div>
-
-        <div class="qa-card hover-pink" onclick="showSection('referent-ex')">
-          <div class="qa-category">COMPRENSIÓN</div>
-          <div class="qa-title">Buscar el<br>Referente 🔍</div>
-          <div class="qa-action">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14"></path>
-              <path d="M12 5l7 7-7 7"></path>
-            </svg>
-            Tocá para practicar
-          </div>
-        </div>
-
-        <div class="qa-card hover-yellow" onclick="showSection('synonym-ex')">
-          <div class="qa-category">VOCABULARIO</div>
-          <div class="qa-title">Sinónimos y<br>Antónimos 🔄</div>
-          <div class="qa-action">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14"></path>
-              <path d="M12 5l7 7-7 7"></path>
-            </svg>
-            Tocá para practicar
-          </div>
-        </div>
-    </div>
-  </div>
-
-  <!-- 
-    ======================================================================
-    SECCIÓN 2: GRAMÁTICA (GRAMMAR)
-    Muestra la lista de temas a la izquierda y el contenido a la derecha.
-    ====================================================================== 
-  -->
-  <div id="grammar" class="section">
-    <div class="section-title">Gramática</div>
-    <div class="section-sub">Seleccioná un tema de la lista para leerlo en modo concentración</div>
-    <button class="grammar-back-btn" style="display:inline-flex; align-items:center; gap:0.5rem; margin-bottom:1.5rem;" onclick="showSection('home')">← Volver al inicio</button>
-
-    <!-- Layout Master-Detail (Lista lateral + Panel principal) -->
-    <div class="grammar-book-layout">
-      
-      <!-- Panel Lateral (Izquierda) -->
-      <div class="grammar-sidebar">
-        <!-- Leyenda de colores explicativa que queda pegada arriba (sticky) -->
-        <div class="grammar-legend"
-          style="position: sticky; top: 0; z-index: 10; padding: 1rem; background: var(--surface); border-bottom: 1px solid var(--border); font-size: 0.8rem; margin: 0; border-radius: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-          <strong style="display:block; margin-bottom: 0.5rem; color: var(--text-muted);">
-            <svg style="vertical-align:-2px; margin-right:4px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-              width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <path d="M12 16v-4"></path>
-              <path d="M12 8h.01"></path>
-            </svg>
-            Esquema de Niveles:
-          </strong>
-          <div style="display: flex; flex-direction: column; gap: 0.4rem;">
-            <div style="display: flex; align-items: center; justify-content: space-between;"><span
-                class="topic-badge badge-1" style="margin:0">Inglés 1</span> <span
-                style="color:var(--text-muted); font-size:0.75rem;">Fundamentos</span></div>
-            <div style="display: flex; align-items: center; justify-content: space-between;"><span
-                class="topic-badge badge-2" style="margin:0">Inglés 2</span> <span
-                style="color:var(--text-muted); font-size:0.75rem;">Avanzado</span></div>
-            <div style="display: flex; align-items: center; justify-content: space-between;"><span
-                class="topic-badge badge-shared" style="margin:0">Inglés 1 & 2</span> <span
-                style="color:var(--text-muted); font-size:0.75rem;">Compartido</span></div>
-            <div style="display: flex; align-items: center; justify-content: space-between;"><span
-                class="topic-badge badge-tech" style="margin:0">Inglés Técnico</span> <span
-                style="color:var(--text-muted); font-size:0.75rem;">CUC</span></div>
-          </div>
-        </div>
-        
-        <!-- Aquí app.js (renderTopics) inyecta la lista de temas (<li>) -->
-        <ul id="grammarTopicList"></ul>
-      </div>
-
-      <!-- Panel Principal (Derecha) -->
-      <div class="grammar-content" id="grammarContentArea">
-        <!-- Pantalla vacía inicial antes de seleccionar un tema -->
-        <div class="grammar-empty-state">
-          <span class="empty-icon">
-            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="64" height="64" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
-              <path d="M6 6h10M6 10h10M6 14h10" />
-            </svg>
-          </span>
-          <p>Elegí un tema del menú lateral para empezar a repasar.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 
-    ======================================================================
-    SECCIÓN 3: FLASHCARDS (Tarjetas de Memoria)
-    ====================================================================== 
-  -->
-  <div id="flashcards" class="section">
-    <div class="section-title">Flashcards</div>
-    <div class="section-sub">Tocá cada tarjeta para ver la respuesta</div>
-    <button class="grammar-back-btn" style="display:inline-flex; align-items:center; gap:0.5rem; margin-bottom:1.5rem;" onclick="showSection('home')">← Volver al inicio</button>
-    
-    <!-- Controles (Filtros y Barajar) se inyectan acá vía app.js -->
-    <div class="fc-controls" id="fcControls"></div>
-    <!-- Cuadrícula donde caen todas las tarjetas animadas -->
-    <div class="flashcards-grid" id="flashcardsGrid"></div>
-  </div>
-
-  <!-- 
-    ======================================================================
-    SECCIÓN 4: QUIZ (Examen de Opción Múltiple)
-    ====================================================================== 
-  -->
-  <div id="quiz" class="section">
-    <div class="section-title">Quiz</div>
-    <div class="section-sub">Poné a prueba lo que sabés</div>
-    <button class="grammar-back-btn" style="display:inline-flex; align-items:center; gap:0.5rem; margin-bottom:1.5rem;" onclick="showSection('home')">← Volver al inicio</button>
-    
-    <div class="quiz-controls" id="quizControls">
-      <!-- Filtro inyectado por JS -->
-    </div>
-    
-    <div class="quiz-wrapper">
-      <!-- Cabecera del Quiz (Contador, Barra de Progreso y Puntaje) -->
-      <div class="quiz-header">
-        <span class="quiz-count" id="quizCount">1 / 20</span>
-        <div class="quiz-progress-bar">
-          <div class="quiz-progress-fill" id="quizProgress" style="width:5%"></div>
-        </div>
-        <span class="quiz-score-badge" id="quizScore">✓ 0</span>
-      </div>
-      <!-- Aquí cae la tarjeta dinámica de la pregunta actual (vía JS) -->
-      <div id="quizContainer"></div>
-    </div>
-  </div>
-
-  <!-- 
-    ======================================================================
-    SECCIÓN 5: MINIJUEGO - BUSCAR EL REFERENTE
-    ====================================================================== 
-  -->
-  <div id="referent-ex" class="section">
-    <div class="section-title">Buscar el Referente</div>
-    <div class="section-sub">Encontrá a qué o a quién hace referencia la palabra subrayada.</div>
-    <button class="grammar-back-btn" style="display:inline-flex; align-items:center; gap:0.5rem; margin-bottom:1.5rem;" onclick="showSection('minigames')">← Volver a Minijuegos</button>
-    <div class="quiz-wrapper">
-      <div class="quiz-header">
-        <span class="quiz-count" id="refCount">1 / 10</span>
-        <div class="quiz-progress-bar">
-          <div class="quiz-progress-fill" id="refProgress" style="width:10%"></div>
-        </div>
-        <span class="quiz-score-badge" id="refScore">✓ 0</span>
-      </div>
-      <!-- Pregunta dinámica inyectada vía JS -->
-      <div id="referentContainer"></div>
-    </div>
-  </div>
-
-  <!-- 
-    ======================================================================
-    SECCIÓN 6: MINIJUEGO - SINÓNIMOS Y ANTÓNIMOS
-    ====================================================================== 
-  -->
-  <div id="synonym-ex" class="section">
-    <div class="section-title">Sinónimos y Antónimos</div>
-    <div class="section-sub">Ampliá tu vocabulario técnico identificando la relación correcta.</div>
-    <button class="grammar-back-btn" style="display:inline-flex; align-items:center; gap:0.5rem; margin-bottom:1.5rem;" onclick="showSection('minigames')">← Volver a Minijuegos</button>
-    <div class="quiz-wrapper">
-      <div class="quiz-header">
-        <span class="quiz-count" id="synCount">1 / 10</span>
-        <div class="quiz-progress-bar">
-          <div class="quiz-progress-fill" id="synProgress" style="width:10%"></div>
-        </div>
-        <span class="quiz-score-badge" id="synScore">✓ 0</span>
-      </div>
-      <!-- Pregunta dinámica inyectada vía JS -->
-      <div id="synonymContainer"></div>
-    </div>
-  </div>
-
-  <!-- 
-    ======================================================================
-    SECCIÓN 7: BIBLIOTECA DE VOCABULARIO (VERBOS)
-    ====================================================================== 
-  -->
-  <div id="verbs" class="section">
-    <div class="section-title">Biblioteca de Vocabulario</div>
-    <div class="section-sub">Busca y explora verbos y términos técnicos</div>
-    <button class="grammar-back-btn" style="display:inline-flex; align-items:center; gap:0.5rem; margin-bottom:1.5rem;" onclick="showSection('home')">← Volver al inicio</button>
-
-    <!-- Barra de búsqueda superior -->
-
-    <div class="verbs-controls" style="display:flex; gap:0.5rem; margin-bottom:1rem; position:relative;" id="verbControls">
-      <input class="verbs-search" type="text" placeholder="Buscar vocabulario... (ej: network, to buy)"
-        oninput="handleVerbSearch()" id="verbSearch" style="flex:1; padding-right: 2.5rem;">
-      <button id="clearVerbSearchBtn" style="display:none; position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--text-muted); cursor:pointer; padding:0.2rem;" onclick="clearVerbSearch()" title="Limpiar búsqueda">
-        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      </button>
-    </div>
-
-    <div id="verbBackBar" class="verb-back-bar" style="display:none;">
-      <button class="grammar-back-btn verb-back-btn" onclick="selectVerbCategory(null)">← Volver a categorías</button>
-      <span class="verb-cat-label"></span>
-    </div>
-
-    <!-- Contenedor dinámico principal donde se dibujan las categorías o la lista filtrada -->
-    <div class="verbs-accordion-wrap" id="verbsBody">
-      <!-- Los verbos o las categorías se inyectan acá vía JS -->
-    </div>
-  </div>
-
-  <!-- 
-    ======================================================================
-    SECCIÓN 8: MODO RÁFAGA (VERB BLAST)
-    Juego interactivo con múltiples pantallas (Configuración, Juego, Resultado).
-    ====================================================================== 
-  -->
-  <div id="blast" class="section">
-    <!-- Capas de efectos visuales aceleradas por hardware (Pantallazos de error/acierto) -->
-    <div class="vb-flash-overlay" id="vb-flash-overlay"></div>
-    <div id="vb-penalty-float" class="vb-penalty-float" style="display:none;">-1s</div>
-
-    <div class="section-title">Modo Ráfaga ⚡</div>
-    <div class="section-sub" id="vb-section-subtitle">Gramática, verbos y reflejos a máxima velocidad</div>
-    <button class="grammar-back-btn" style="display:inline-flex; align-items:center; gap:0.5rem; margin-bottom:1.5rem;" onclick="showSection('minigames')">← Volver a Minijuegos</button>
-
-    <!-- [PANTALLA 1] Menú de configuración inicial -->
-    <div id="vb-start-screen" class="vb-screen active fade-in">
-      <div class="vb-card vb-glass">
-        <div class="vb-hero-icon">⚡</div>
-        <h2 class="vb-game-title">MODO RÁFAGA</h2>
-        <p class="vb-game-instructions">
-          Aprende y pon a prueba tus conocimientos de inglés. Seleccioná tu modo de juego, el formato de respuestas y el
-          tipo de preguntas para iniciar.
-        </p>
-
-        <div class="vb-record-container">
-          <div class="vb-record-badge">
-            <span class="vb-record-icon">💀</span> Récord A Muerte: <strong id="vb-record-value">0</strong>
-          </div>
-          <div class="vb-record-badge"
-            style="background: rgba(0, 191, 255, 0.08); border-color: rgba(0, 191, 255, 0.2); color: var(--accent2);">
-            <span class="vb-record-icon">⏱️</span> Récord Contrarreloj: <strong id="vb-record-value-ta">0</strong>
-          </div>
-        </div>
-
-        <!-- Setup Form -->
-        <div class="vb-setup-form">
-          <div class="vb-setup-row">
-            <div class="vb-setup-label">Modo de juego:</div>
-            <div class="vb-setup-chips">
-              <button class="vb-chip-btn active" id="btn-mode-sd" onclick="setVbGameMode('sudden-death', this)">A Muerte
-                💀</button>
-              <button class="vb-chip-btn" id="btn-mode-ta" onclick="setVbGameMode('time-attack', this)">Contrarreloj
-                ⏱️</button>
-            </div>
-          </div>
-
-          <div class="vb-setup-row">
-            <div class="vb-setup-label">Respuestas:</div>
-            <div class="vb-setup-chips">
-              <button class="vb-chip-btn active" id="btn-format-mixed" onclick="setVbFormat('mixed', this)">Mezclado
-                🔀</button>
-              <button class="vb-chip-btn" id="btn-format-typing" onclick="setVbFormat('typing', this)">Escribir
-                ⌨️</button>
-              <button class="vb-chip-btn" id="btn-format-options" onclick="setVbFormat('options', this)">Opciones
-                🔘</button>
-            </div>
-          </div>
-
-
-
-          <!-- Individual speed selector, shown only for Sudden Death -->
-          <div class="vb-setup-row" id="vb-difficulty-row">
-            <div class="vb-setup-label">Tiempo por verbo:</div>
-            <div class="vb-difficulty-selector">
-              <button class="vb-diff-btn" id="btn-diff-easy" onclick="setVbDifficulty(15, this)">
-                <span class="diff-name">Fácil</span>
-                <span class="diff-time">15s</span>
-              </button>
-              <button class="vb-diff-btn active" id="btn-diff-normal" onclick="setVbDifficulty(10, this)">
-                <span class="diff-name">Normal</span>
-                <span class="diff-time">10s</span>
-              </button>
-              <button class="vb-diff-btn" id="btn-diff-extreme" onclick="setVbDifficulty(6, this)">
-                <span class="diff-name">Extremo</span>
-                <span class="diff-time">6s</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <button class="vb-start-btn" onclick="startVerbBlast()" style="margin-top: 1rem;">
-          ¡Iniciar Ráfaga! ⚡
+    <!-- Contenido Principal SPA -->
+    <main>
+        <!-- Global Back Button -->
+        <button id="global-back-btn" class="glass-btn" onclick="goBack()"
+            style="display:none; margin-bottom: 1.5rem; font-size: 0.85rem; align-items: center; gap: 0.5rem; width: fit-content;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg> Volver
         </button>
-      </div>
+
+        <!-- SECCIÓN 1: INICIO -->
+        <section id="s-inicio" class="section active">
+            <div class="hero" style="text-align: left; padding: 1rem 0 2rem 0;">
+                <h1 class="mono" style="font-size: 2.2rem;">&gt;_ <span class="matrix-glitch"
+                        id="main-hero-title">CypherCode<span style="color: var(--primary);">.exe</span><span
+                            class="blink" style="color: var(--primary);">_</span></span></h1>
+                <p style="color: var(--text-main); opacity: 0.7;">Centro de Aprendizaje de Estructuras y Algoritmos</p>
+            </div>
+
+            <!-- Dashboard Stats Panels -->
+            <div class="dashboard-stats">
+                <!-- PROGRESS -->
+                <div class="stat-panel glass">
+                    <div class="panel-header">PROGRESS</div>
+                    <div class="progress-circle" style="--percent: 68">
+                        <div class="progress-text">
+                            <h2 style="font-size: 2.5rem; margin-bottom: 0.2rem;">68%</h2>
+                            <span class="subtext" style="color: var(--text-main); font-weight: bold;">Python Path</span>
+                            <span class="subtext2" style="font-size: 0.75rem; opacity: 0.6;">8/12 Modules</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PERFORMANCE -->
+                <div class="stat-panel glass">
+                    <div class="panel-header">PERFORMANCE</div>
+                    <span class="subtext"
+                        style="display:block; margin-bottom: 1rem; opacity: 0.8; font-size: 0.85rem;">Quiz Scores</span>
+                    <div class="bar-chart">
+                        <div class="y-axis">
+                            <span>100</span>
+                            <span>75</span>
+                            <span>50</span>
+                            <span>25</span>
+                            <span>0</span>
+                        </div>
+                        <div class="bars">
+                            <div class="bar-col">
+                                <div class="bar">
+                                    <div class="fill" style="height: 50%;"></div><span class="bar-val">50</span>
+                                </div><span>1</span>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar">
+                                    <div class="fill" style="height: 60%;"></div><span class="bar-val">60</span>
+                                </div><span>2</span>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar">
+                                    <div class="fill" style="height: 60%;"></div><span class="bar-val">60</span>
+                                </div><span>3</span>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar">
+                                    <div class="fill" style="height: 85%;"></div><span class="bar-val">85</span>
+                                </div><span>4</span>
+                            </div>
+                            <div class="bar-col">
+                                <div class="bar">
+                                    <div class="fill" style="height: 100%;"></div><span class="bar-val">100</span>
+                                </div><span>5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SKILL LEVELS -->
+                <div class="stat-panel glass">
+                    <div class="panel-header">SKILL LEVELS</div>
+                    <div class="hex-grid">
+                        <div class="hex-row">
+                            <div class="hex filled">
+                                <div class="hex-inner">Python<br><small>(Advanced)</small></div>
+                            </div>
+                        </div>
+                        <div class="hex-row right">
+                            <div class="hex filled alt">
+                                <div class="hex-inner">Logic<br><small>(Expert)</small></div>
+                            </div>
+                        </div>
+                        <div class="hex-row">
+                            <div class="hex empty">
+                                <div class="hex-inner">Algorithms<br><small>(Mid)</small></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Access Grid (Práctica) -->
+            <h3 class="mono" style="margin-top: 3rem; margin-bottom: 1rem; opacity: 0.8; color: var(--primary);">// ZONA
+                DE PRÁCTICA</h3>
+            <div class="quick-access-grid">
+                <div class="qa-card glass hover-green" onclick="showSection('flashcards')">
+                    <div class="qa-category">MEMORIA</div>
+                    <div class="qa-title">Tarjetas de<br>Estudio</div>
+                    <div class="qa-action">🗂️ Iniciar repaso</div>
+                </div>
+
+                <div class="qa-card glass hover-blue" onclick="showSection('quiz')">
+                    <div class="qa-category">EVALUACIÓN</div>
+                    <div class="qa-title">Quiz de<br>Conocimientos</div>
+                    <div class="qa-action">✅ Comenzar test</div>
+                </div>
+
+                <div class="qa-card glass hover-pink" onclick="showSection('terminal')">
+                    <div class="qa-category">DEPURACIÓN</div>
+                    <div class="qa-title">Consola y<br>Debug</div>
+                    <div class="qa-action">🐞 Buscar errores</div>
+                </div>
+
+                <div class="qa-card glass hover-yellow" onclick="showSection('visualizador')">
+                    <div class="qa-category">ALGORITMOS</div>
+                    <div class="qa-title">Visualizador<br>Trace Mode</div>
+                    <div class="qa-action">👁️ Ver algoritmos</div>
+                </div>
+
+                <div class="qa-card glass hover-purple" onclick="showSection('ejemplos')">
+                    <div class="qa-category">CÓDIGO FUENTE</div>
+                    <div class="qa-title">Galería de<br>Ejemplos</div>
+                    <div class="qa-action">📂 Ver ejemplos</div>
+                </div>
+            </div>
+
+
+            <!-- MANIFIESTO / FILOSOFÍA -->
+            <div class="glass"
+                style="margin-top: 4rem; margin-bottom: 2rem; text-align: left; border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; gap: 0.5rem; max-width: 900px; margin-inline: auto;">
+                <div style="display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.5rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none"
+                        stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20"></path>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    <h3 class="mono" style="margin: 0; color: var(--primary);">Filosofía de la Plataforma</h3>
+                </div>
+                <p style="margin: 0; color: var(--text-main); opacity: 0.8; font-size: 0.95rem; line-height: 1.6;">
+                    <strong>Aprender haciendo, no memorizando.</strong> La misión de CypherCode es proporcionar un
+                    entorno inmersivo y sin distracciones para dominar la lógica de programación. No se trata solo de
+                    leer teoría pasivamente, sino de interactuar con el código, buscar bugs como un verdadero depurador
+                    y visualizar algoritmos abstractos paso a paso. Centraliza tus recursos, entrena tus habilidades y
+                    eleva tu nivel técnico.
+                </p>
+            </div>
+
+            <!-- CRÉDITOS DEL DESARROLLADOR -->
+            <div style="margin-bottom: 4rem; text-align: left; max-width: 900px; margin-inline: auto; padding: 0 1rem;">
+                <p style="margin: 0; font-size: 1.1rem; color: var(--text-main);">Desarrollado por <strong
+                        style="color: var(--primary);">Emmanuel Vega</strong></p>
+                <p style="margin: 0.3rem 0 0 0; font-size: 1.1rem; color: var(--text-main);">CypherCode.exe &copy; 2026
+                </p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 7: EJEMPLOS -->
+        <section id="s-ejemplos" class="section">
+            <h2 class="mono" style="text-align:center; color: var(--primary); margin-bottom: 0.5rem;">Galería de
+                Ejemplos</h2>
+            <p style="text-align:center; margin-bottom: 2rem;">Fragmentos de código extraídos directamente de las tareas
+                de Progra 1 y 2.</p>
+
+            <div class="concepts-layout">
+                <aside class="glass sidebar">
+                    <div
+                        style="font-weight: bold; font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--primary); padding-bottom:8px; border-bottom:1px solid var(--border-glass); margin-bottom: 10px;">
+                        // FILTROS
+                    </div>
+                    <div id="examples-filters"
+                        style="display:flex; flex-direction:column; gap:0.5rem; max-height: calc(100vh - 200px); overflow-y: auto;">
+                        <!-- Se poblarán los tags dinámicamente -->
+                    </div>
+                </aside>
+
+                <div class="glass content-panel" id="example-viewer" style="width: 100%;">
+                    <!-- Cargado dinámicamente -->
+                    <div
+                        style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; opacity:0.6; text-align:center;">
+                        <h2 class="mono" style="color:var(--primary);">&gt; SELECCIONA UN FILTRO</h2>
+                        <p>Usa el menú lateral para filtrar los ejemplos disponibles.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SECCIÓN 2: CONCEPTOS -->
+        <section id="s-conceptos" class="section">
+            <div class="concepts-layout">
+                <aside class="glass sidebar">
+                    <div
+                        style="font-weight: bold; font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--primary); padding-bottom:8px; border-bottom:1px solid var(--border-glass);">
+                        // UNIDADES TEMÁTICAS
+                    </div>
+                    <ul id="topic-list" style="margin-top:10px;">
+                        <!-- Cargado dinámicamente por app.js -->
+                    </ul>
+                </aside>
+                <div class="glass content-panel" id="topic-detail">
+                    <!-- Cargado dinámicamente al hacer clic en un tema -->
+                    <div
+                        style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; opacity:0.6; text-align:center;">
+                        <h2 class="mono" style="color:var(--primary);">&gt; SELECCIONA UN TEMA</h2>
+                        <p>Usa el menú lateral para abrir los conceptos oficiales y comparar la sintaxis en múltiples
+                            lenguajes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: FLASHCARDS -->
+        <section id="s-flashcards" class="section">
+            <h2 class="mono" style="text-align:center; color: var(--primary); margin-bottom: 0.5rem;">Tarjetas de
+                Estudio</h2>
+            <p style="text-align:center; margin-bottom: 2rem;">Repaso de conceptos. Haz clic en la tarjeta para
+                voltearla.</p>
+
+            <div class="category-filter-bar">
+                <select class="theme-select" id="fc-cat" onchange="renderFlashcards()" style="max-width:300px;">
+                    <option value="all">TODAS LAS CATEGORÍAS</option>
+                </select>
+                <button class="glass-btn" onclick="shuffleFC()">⚡ MEZCLAR</button>
+                <span class="mono" id="fc-count"
+                    style="display:inline-flex; align-items:center; color:var(--primary);">[0 tarjetas]</span>
+            </div>
+
+            <div id="fc-grid">
+                <!-- Cargado dinámicamente por app.js -->
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: QUIZ -->
+        <section id="s-quiz" class="section">
+            <!-- Pantalla Inicial del Quiz -->
+            <div class="glass quiz-panel" id="quiz-start-screen">
+                <h2 class="mono" style="color:var(--primary); margin-bottom:1.5rem; text-align:center;">Cuestionario de
+                    Evaluación</h2>
+                <p style="margin-bottom:2rem; text-align:center;">Pon a prueba tus conocimientos de programación. Elige
+                    una categoría y comienza el test.</p>
+                <div style="display:flex; flex-direction:column; gap:1.5rem; max-width:400px; margin:0 auto;">
+                    <select class="theme-select" id="quiz-cat" style="width:100%;">
+                        <option value="all">TODAS LAS CATEGORÍAS</option>
+                    </select>
+                    <button class="glass-btn" onclick="startQuiz()" style="font-size:1.1rem; padding:12px;">INICIAR
+                        CUESTIONARIO</button>
+                </div>
+            </div>
+
+            <!-- Pantalla Activa de Juego -->
+            <div class="glass quiz-panel" id="quiz-play" style="display:none;">
+                <!-- Completado dinámicamente por app.js -->
+            </div>
+
+            <!-- Resumen Final del Quiz -->
+            <div class="glass quiz-panel" id="quiz-summary-screen" style="display:none;">
+                <!-- Completado dinámicamente por app.js -->
+            </div>
+        </section>
+
+        <!-- SECCIÓN 5: BIBLIOTECA -->
+        <section id="s-biblioteca" class="section">
+            <h2 class="mono" style="color: var(--primary); margin-bottom: 0.5rem; text-align:center;">Biblioteca de
+                Referencia</h2>
+            <p style="text-align:center; margin-bottom: 2rem;">Catálogo interactivo de comandos, métodos y estructuras
+                algorítmicas básicas.</p>
+
+            <div class="search-bar-container">
+                <input type="text" class="cyber-search" id="lib-search" oninput="renderLibrary()"
+                    placeholder="Buscar comandos o conceptos...">
+            </div>
+
+            <div class="library-body">
+                <!-- Se poblará con la vista de cuadrícula de categorías o lista filtrada -->
+                <div class="verb-cat-grid" id="lib-grid">
+                    <!-- Completado dinámicamente por app.js -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 6: CONSOLA Y JUEGO DE DEPURACIÓN -->
+        <section id="s-terminal" class="section">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem;">
+                <!-- Debug Protocol Widget -->
+                <div class="glass debug-panel">
+                    <h2 class="mono" style="color:var(--danger); margin-bottom:1rem;">Depurador de Código</h2>
+                    <p style="margin-bottom:1.5rem; font-size:0.9rem;">Analiza el código, localiza la línea que genera
+                        el error y selecciona la solución adecuada.</p>
+
+                    <div class="debug-code-container" id="debug-container">
+                        <!-- Líneas cargadas por app.js -->
+                    </div>
+
+                    <div class="glass debug-console" id="debug-console" style="border-color:var(--danger);">
+                        <div class="debug-console-title mono">⚠️ ALERTA DE COMPILADOR:</div>
+                        <p id="debug-err-desc" style="font-size:0.85rem; margin-bottom:1rem; opacity:0.8;"></p>
+                        <div class="debug-console-options" id="debug-options">
+                            <!-- Opciones para solucionar el bug -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Forge Sandbox Terminal Widget -->
+                <div class="sandbox-terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-circles">
+                            <span class="term-circle red"></span>
+                            <span class="term-circle yellow"></span>
+                            <span class="term-circle green"></span>
+                        </div>
+                        <div class="terminal-title">Terminal Interactiva</div>
+                    </div>
+                    <div class="terminal-body" id="term-body">
+                        <div class="terminal-output" id="term-output">Intérprete listo.
+                            Escribe 'help' para ver una lista de comandos disponibles.</div>
+                        <div class="terminal-line">
+                            <span class="mono"
+                                style="color:var(--primary); font-weight:bold; white-space:nowrap;">$</span>
+                            <input type="text" class="terminal-input-field" id="term-input"
+                                onkeydown="handleTerminalCommand(event)" autocomplete="off" spellcheck="false">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 7: VISUALIZADOR (BIG-O ANALYZER & TRACE MODE) -->
+        <section id="s-visualizador" class="section">
+            <div class="analyzer-layout">
+                <!-- Big-O Slider Analyzer -->
+                <div class="glass analyzer-control-panel">
+                    <h2 class="mono" style="color:var(--primary); margin-bottom:1rem;">Analizador de Complejidad Big-O
+                    </h2>
+                    <p style="font-size:0.9rem; margin-bottom:1.5rem;">Ajusta el tamaño del arreglo de datos ($N$) y
+                        observa cómo impacta de forma teórica en el consumo de CPU y memoria según el algoritmo
+                        seleccionado.</p>
+
+                    <div style="margin-bottom:1.5rem;">
+                        <label class="mono" style="font-size:0.85rem; color:var(--primary);">Seleccionar
+                            Algoritmo:</label>
+                        <select class="theme-select" id="analyzer-algo" onchange="updateAnalyzer()"
+                            style="width:100%; margin-top:0.5rem;">
+                            <option value="o1">Búsqueda por Índice / Hashing — O(1)</option>
+                            <option value="ologn">Búsqueda Binaria — O(log N)</option>
+                            <option value="on">Búsqueda Lineal / Suma simple — O(N)</option>
+                            <option value="onlogn">Ordenamiento Merge / QuickSort — O(N log N)</option>
+                            <option value="on2">Bubble Sort / Bucles anidados — O(N²)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <div style="display:flex; justify-content:space-between;" class="mono">
+                            <span>Tamaño de Datos (N):</span>
+                            <span id="analyzer-n-val" style="color:var(--primary); font-weight:bold;">100</span>
+                        </div>
+                        <input type="range" min="1" max="1000" value="100" class="cyber-slider" id="analyzer-slider"
+                            oninput="updateAnalyzer()">
+                    </div>
+
+                    <div style="margin-top:1.5rem; font-size:0.85rem; line-height:1.5; opacity:0.8;" id="analyzer-desc">
+                        <!-- Descripción técnica cargada dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- Big-O Gauges -->
+                <div class="glass graph-gauge-container">
+                    <div class="gauge-block">
+                        <div class="gauge-label mono">
+                            <span>Ciclos de CPU:</span>
+                            <span id="gauge-cpu-val">Óptimo</span>
+                        </div>
+                        <div class="gauge-bar-outer">
+                            <div class="gauge-bar-inner" id="gauge-cpu"></div>
+                        </div>
+                    </div>
+                    <div class="gauge-block">
+                        <div class="gauge-label mono">
+                            <span>Uso de Memoria:</span>
+                            <span id="gauge-mem-val">Óptimo</span>
+                        </div>
+                        <div class="gauge-bar-outer">
+                            <div class="gauge-bar-inner" id="gauge-mem"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trace Mode visualizer widget -->
+            <div class="glass trace-panel" style="margin-top:2rem;">
+                <h2 class="mono" style="color:var(--primary); margin-bottom:1rem;">&gt; Trace Mode: Búsqueda Binaria
+                </h2>
+                <p style="font-size:0.9rem; margin-bottom:1.5rem;">Visualiza paso a paso cómo se desplazan los punteros
+                    Izquierda (L), Derecha (R) y Medio (M) sobre una colección ordenada para localizar el valor buscado.
+                </p>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+                    <div class="mono" style="font-size:0.9rem;">
+                        <span>Buscar número: </span>
+                        <span style="color:var(--primary); font-weight:bold;">37</span>
+                    </div>
+                    <div class="trace-controls">
+                        <button class="glass-btn" onclick="prevTraceStep()">[ &lt; Paso Anterior ]</button>
+                        <button class="glass-btn" onclick="nextTraceStep()">[ Paso Siguiente &gt; ]</button>
+                        <button class="glass-btn" onclick="resetTrace()">[ ⟳ Reiniciar ]</button>
+                    </div>
+                </div>
+
+                <div class="trace-visualizer" id="trace-visualizer">
+                    <!-- Celdas numéricas inyectadas dinámicamente -->
+                </div>
+
+                <div class="trace-explain-box mono" id="trace-explain">
+                    Inicia el rastreo presionando 'Paso Siguiente'.
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 8: REFERENCIA RÁPIDA -->
+        <section id="s-referencia" class="section">
+            <div class="glass content-panel">
+                <h2 class="mono" style="color:var(--primary);">&gt; Referencia Sintáctica Rápida</h2>
+                <div class="category-filter-bar" style="justify-content: flex-start; margin-bottom:1.5rem;">
+                    <button class="glass-btn ref-tab active" onclick="showRef('tipos', this)">Tipos de Datos</button>
+                    <button class="glass-btn ref-tab" onclick="showRef('operadores', this)">Operadores</button>
+                    <button class="glass-btn ref-tab" onclick="showRef('control', this)">Estructuras de Control</button>
+                    <button class="glass-btn ref-tab" onclick="showRef('arrays', this)">Arrays y Colecciones</button>
+                </div>
+                <div id="ref-content">
+                    <!-- Cargado dinámicamente por app.js -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Navegación Móvil Inferior -->
+    <nav id="mobile-nav" class="glass">
+        <button class="mob-btn active" onclick="showSection('inicio', this)">
+            <svg viewBox="0 0 24 24">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+            </svg>
+            Inicio
+        </button>
+        <button class="mob-btn" onclick="showSection('conceptos', this)">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z" />
+            </svg>
+            Conceptos
+        </button>
+        <button class="mob-btn" onclick="showSection('flashcards', this)">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M4 6h2v14H4zm3-4h13c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2zm0 2v12h13V4H7z" />
+            </svg>
+            Cards
+        </button>
+        <button class="mob-btn" onclick="showSection('quiz', this)">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+            </svg>
+            Quiz
+        </button>
+        <button class="mob-btn" onclick="showSection('terminal', this)">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-9 12H5v-2h6v2zm4-4H5V10h10v2zm4-4H5V6h14v2z" />
+            </svg>
+            Consola
+        </button>
+    </nav>
+
+    <!-- Panel de Personalización Lateral -->
+    <div id="customize-panel" class="glass">
+        <div class="customize-header">
+            <h3 class="mono">&gt; Configuración</h3>
+            <button class="close-custom mono" onclick="toggleCustomPanel()">[X]</button>
+        </div>
+
+        <div class="customize-section">
+            <label class="mono">// TEMAS DE COLOR</label>
+            <div class="theme-grid">
+                <button class="glass-btn theme-btn active-theme" data-theme="green">Verde</button>
+                <button class="glass-btn theme-btn" data-theme="amber">Ámbar</button>
+                <button class="glass-btn theme-btn" data-theme="cyan">Cian</button>
+                <button class="glass-btn theme-btn" data-theme="white">Blanco</button>
+                <button class="glass-btn theme-btn" data-theme="red">Rojo</button>
+                <button class="glass-btn theme-btn" data-theme="purple">Synthwave</button>
+            </div>
+        </div>
+
+        <div class="customize-section">
+            <div class="customize-row">
+                <label class="mono">// VELOCIDAD LLUVIA</label>
+                <span class="mono" id="speed-val">40ms</span>
+            </div>
+            <input type="range" min="10" max="150" value="40" class="cyber-slider" oninput="setRainSpeed(this.value)">
+        </div>
+
+        <div class="customize-section">
+            <div class="customize-row">
+                <label class="mono">// DENSIDAD (FUENTE)</label>
+                <span class="mono" id="density-val">14px</span>
+            </div>
+            <input type="range" min="10" max="28" value="14" class="cyber-slider" oninput="setRainDensity(this.value)">
+        </div>
+
+        <div class="customize-section" style="margin-top:1rem; display:flex; flex-direction:column; gap:0.5rem;">
+            <button class="glass-btn" id="btn-pause-rain" onclick="toggleRain()">⏸ Pausar Lluvia</button>
+            <button class="glass-btn" id="btn-hide-rain" onclick="toggleRainVisible()">👁 Ocultar Lluvia</button>
+        </div>
     </div>
 
-    <!-- [PANTALLA 2] Juego Activo (Pantalla principal mientras se juega) -->
-    <div id="vb-game-screen" class="vb-screen fade-in" style="display:none;">
-      <!-- Barra de tiempo (visual) que se va achicando -->
-      <div class="vb-timer-wrap">
-        <div id="vb-timer-bar" class="vb-timer-bar"></div>
-        <div id="vb-timer-icon" class="vb-timer-icon" style="display:none;"></div>
-      </div>
-
-      <!-- Cabecera del juego: Racha actual y tiempo numérico -->
-      <div class="vb-game-header">
-        <div class="vb-streak" id="vb-streak-counter">
-          <span class="vb-streak-icon" id="vb-streak-icon-lbl">🔥</span> <span id="vb-streak-text-lbl">Racha</span>:
-          <strong id="vb-streak-val">0</strong>
+    <!-- Notificación Flotante Simplificada -->
+    <div class="achievement-toast" id="toast-achievement" style="display: none;">
+        <div>
+            <div id="toast-achievement-title" style="font-size:0.95rem; color:var(--primary);">Notificación</div>
         </div>
-        <div class="vb-timer-numeric" id="vb-timer-numeric" style="display:none;">
-          ⏱️ <strong id="vb-timer-numeric-val">60</strong>s
-        </div>
-      </div>
-
-      <div class="vb-card vb-glass vb-game-card">
-        <div class="vb-question-prompt" id="vb-question-prompt">Escribí el pasado simple:</div>
-        <div class="vb-verb-present" id="vb-verb-present">go</div>
-        <div class="vb-verb-translation" id="vb-verb-translation">ir</div>
-
-        <!-- Input format (typing) -->
-        <div class="vb-input-wrapper" id="vb-input-wrapper">
-          <input type="text" id="vb-input" class="vb-input" placeholder="Escribí aquí..." autocomplete="off"
-            autocorrect="off" autocapitalize="off" spellcheck="false" onkeydown="handleVbInputKey(event)">
-          <div class="vb-mobile-tip" style="margin-top: 0.8rem;">Presioná Enter para enviar</div>
-        </div>
-
-        <!-- Diseño alternativo 2: Botones de opciones (Inyectados por JS) -->
-        <div class="vb-options-grid" id="vb-options-container" style="display:none;">
-          <!-- Options will be injected by JS -->
-        </div>
-      </div>
     </div>
 
-    <!-- [PANTALLA 3] Resultados (Game Over) -->
-    <div id="vb-over-screen" class="vb-screen fade-in" style="display:none;">
-      <div class="vb-card vb-glass">
-        <div class="vb-game-over-icon" id="vb-over-icon">💥</div>
-        <h2 class="vb-game-over-title" id="vb-over-title">FIN DE LA RÁFAGA</h2>
+    <!-- Datos de la aplicación -->
+    <script src="data/examples.js"></script>
+    <script src="data/topics.js"></script>
+    <script src="data/flashcards.js"></script>
+    <script src="data/quiz.js"></script>
+    <script src="data/commands.js"></script>
+    <script src="data/debugChallenges.js"></script>
 
-        <!-- Banner motivacional si se rompe el récord -->
-        <div id="vb-over-new-record" class="vb-new-record-banner" style="display:none;">
-          🏆 ¡NUEVO RÉCORD PERSONAL!
-        </div>
+    <!-- Enlace a la lógica principal -->
+    <script src="app.js?v=8"></script>
 
-        <div class="vb-results-summary">
-          <div class="vb-result-stat">
-            <span class="vb-result-label" id="vb-over-score-lbl">Puntos</span>
-            <span class="vb-result-val" id="vb-over-streak">0</span>
-          </div>
-          <div class="vb-result-stat">
-            <span class="vb-result-label">Récord Anterior</span>
-            <span class="vb-result-val" id="vb-over-record">0</span>
-          </div>
-        </div>
-
-        <!-- Failure Details Area -->
-        <div class="vb-error-details" id="vb-error-details">
-          <!-- Injected dynamically by JS -->
-        </div>
-
-        <div class="vb-over-buttons">
-          <button class="vb-start-btn" onclick="startVerbBlast()">
-            Jugar de nuevo 🔄
-          </button>
-          <button class="vb-back-btn" onclick="exitVerbBlast()">
-            Volver al inicio
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 
-    ======================================================================
-    FOOTER (Créditos)
-    ====================================================================== 
-  -->
-  <footer class="app-footer">
-    <div class="footer-content">
-      <p class="footer-text">
-        <span class="default-text">ByteLanguage.exe &copy; 2026</span>
-        <span class="hover-text">Desarrollado por <strong style="color: var(--accent);">Emmanuel Vega</strong></span>
-      </p>
-    </div>
-  </footer>
-
-  <div class="mobile-nav">
-    <button class="mob-btn active" onclick="showSection('home')">
-      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-        <polyline points="9 22 9 12 15 12 15 22" />
-      </svg>
-      <span>Inicio</span>
-    </button>
-    <button class="mob-btn" onclick="showSection('grammar')">
-      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
-        <path d="M6 6h10M6 10h10M6 14h10" />
-      </svg>
-      <span>Gramática</span>
-    </button>
-    <button class="mob-btn" onclick="showSection('flashcards')">
-      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="14" height="14" rx="2" ry="2" />
-        <path d="M21 7h-2v10H9v2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z" />
-      </svg>
-      <span>Cards</span>
-    </button>
-    <button class="mob-btn" onclick="showSection('verbs')">
-      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 20h9" />
-        <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
-      </svg>
-      <span>Vocabulario</span>
-    </button>
-  </div>
-
-  <script>
-    function updateNetworkStatus() {
-      const dot = document.getElementById('networkStatusDot');
-      
-      if (navigator.onLine) {
-        if (dot) {
-          dot.style.background = 'var(--accent)';
-          dot.style.boxShadow = '0 0 8px var(--accent)';
-          dot.title = 'Conectado';
+    <!-- Inicialización del Service Worker para PWA Offline -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('[PWA] Service Worker registrado con éxito', reg.scope))
+                    .catch(err => console.error('[PWA] Fallo en registro del Service Worker', err));
+            });
         }
-        document.body.classList.remove('is-offline');
-      } else {
-        if (dot) {
-          dot.style.background = 'var(--accent3)';
-          dot.style.boxShadow = '0 0 8px var(--accent3)';
-          dot.title = 'Sin conexión (Offline) - Guía 100% disponible';
-        }
-        document.body.classList.add('is-offline');
-      }
-    }
-
-    window.addEventListener('online', updateNetworkStatus);
-    window.addEventListener('offline', updateNetworkStatus);
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js', { scope: './' })
-          .then(reg => {
-            console.log('Service Worker registrado en:', reg.scope);
-            setTimeout(updateNetworkStatus, 500); // Detecta y muestra el estado real al iniciar
-          })
-          .catch(err => console.warn('Error registrando Service Worker:', err));
-      });
-    }
-
-    // Animación de bienvenida Matrix (Scramble) al cargar la página
-    window.addEventListener('DOMContentLoaded', () => {
-      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ";
-      const titleEl = document.getElementById('main-hero-title');
-      if (!titleEl) return;
-      
-      const originalHTML = 'ByteLanguage<span class="hl">.exe</span><span class="blink" style="color: var(--accent);">_</span>';
-      const targetText = titleEl.getAttribute('data-text');
-      
-      let iteration = 0;
-      let scrambleInterval = setInterval(() => {
-        titleEl.innerText = targetText
-          .split("")
-          .map((letter, index) => {
-            if(index < iteration) {
-              return targetText[index];
-            }
-            return letters[Math.floor(Math.random() * letters.length)];
-          })
-          .join("");
-        
-        if(iteration >= targetText.length){
-          clearInterval(scrambleInterval);
-          titleEl.innerHTML = originalHTML;
-        }
-        iteration += 1 / 5; // Más lento (antes era 1/3)
-      }, 40); // Intervalo ligeramente mayor (antes era 30)
-    });
-  </script>
-  <!-- Data scripts (Modularized DB) -->
-  <script src="data/topics.js"></script>
-  <script src="data/flashcards.js"></script>
-  <script src="data/quiz.js"></script>
-  <script src="data/verbs.js"></script>
-  <script src="data/exercises.js"></script>
-  
-  <script src="app.js"></script>
+    </script>
+    <!-- Highlight.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </body>
 
 </html>
